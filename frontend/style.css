@@ -27,7 +27,7 @@ body {
   line-height: 1.55;
 }
 
-.container { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+.container { max-width: 1320px; margin: 0 auto; padding: 0 24px; }
 .hidden { display: none !important; }
 .mono { font-family: "SF Mono", "Fira Code", Consolas, monospace; font-size: 13px; }
 .muted { color: var(--muted); }
@@ -57,20 +57,20 @@ body {
 .usage-pill.exhausted { background: var(--danger-soft); color: var(--danger); }
 
 /* ------------------------------------------------------------------ hero */
-.hero { display: grid; grid-template-columns: 0.94fr 1.06fr; gap: 46px; align-items: center; padding: 68px 0 44px; }
-.hero h1 { font-size: clamp(38px, 5.4vw, 64px); font-weight: 750; line-height: 1.06; letter-spacing: -0.038em; margin: 18px 0 18px; }
-.hero p { color: var(--muted); margin: 0 0 20px; font-size: 18px; max-width: 54ch; }
+.hero { display: grid; grid-template-columns: 0.86fr 1.14fr; gap: 36px; align-items: center; padding: 78px 0 52px; }
+.hero h1 { font-size: clamp(44px, 6.2vw, 76px); font-weight: 750; line-height: 1.05; letter-spacing: -0.04em; margin: 18px 0 20px; }
+.hero p { color: var(--muted); margin: 0 0 20px; font-size: 19.5px; max-width: 50ch; }
 .hero-badge {
-  display: inline-flex; align-items: center; gap: 9px;
-  color: var(--muted); font-size: 15px; font-weight: 600;
+  display: inline-flex; align-items: center; gap: 10px;
+  color: var(--muted); font-size: 16px; font-weight: 600;
 }
 .hero-badge .badge-dot {
-  width: 24px; height: 24px; border-radius: 999px; background: var(--blue);
+  width: 26px; height: 26px; border-radius: 999px; background: var(--blue);
   color: #fff; display: inline-flex; align-items: center; justify-content: center;
 }
-.hero-badge .badge-dot svg { width: 13px; height: 13px; }
+.hero-badge .badge-dot svg { width: 14px; height: 14px; }
 .hero-points { margin: 12px 0 0; padding: 0; list-style: none; }
-.hero-points li { padding: 6px 0 6px 26px; position: relative; font-size: 15px; }
+.hero-points li { padding: 6px 0 6px 26px; position: relative; font-size: 15.5px; }
 .hero-points li::before { content: "✓"; position: absolute; left: 0; color: var(--blue); font-weight: 700; }
 /* the illustration floats free like in the reference - no card frame */
 .hero-art img { width: 100%; height: auto; display: block; border-radius: 0; box-shadow: none; background: transparent; }
@@ -240,16 +240,16 @@ section[id] { scroll-margin-top: 84px; }
 .header-cta { padding: 10px 22px; font-size: 14px; white-space: nowrap; }
 
 /* hero CTA pair + stat row */
-.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin: 0 0 14px; }
-.btn.pill { border-radius: 999px; padding: 12px 24px; font-size: 14.5px; }
+.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin: 0 0 16px; }
+.btn.pill { border-radius: 999px; padding: 14px 30px; font-size: 15.5px; }
 .btn-sm { padding: 9px 18px; font-size: 13.5px; border-radius: 999px; }
 .hero-stats {
-  display: flex; gap: 30px; margin-top: 22px; padding-top: 20px;
+  display: flex; gap: 34px; margin-top: 24px; padding-top: 22px;
   border-top: 1px solid var(--line);
 }
 .stat { display: grid; }
-.stat-value { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; }
-.stat-label { font-size: 12.5px; color: var(--muted); }
+.stat-value { font-size: 34px; font-weight: 800; letter-spacing: -0.02em; }
+.stat-label { font-size: 13.5px; color: var(--muted); }
 
 /* feature grid */
 .fe-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
