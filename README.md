@@ -263,13 +263,21 @@ cd InvoiceGuard-AI
 python -m venv .venv && source .venv/bin/activate
 pip install -r backend/requirements.txt
 
-uvicorn backend.app.main:app --reload        # → http://localhost:8000
-```
-
 uvicorn backend.app.main:app --reload        # API + UI → http://localhost:8000
 ```
 
-Open `http://localhost:8000`, press **Load sample input**, then **Analyze Invoice**: the worked example runs without preparing any data.</think><tool_call>edit<arg_key>newString</arg_key><arg_value>Open `http://localhost:8000`, press **Load sample input**, then **Analyze Invoice**: the worked example runs without preparing any data.
+Open `http://localhost:8000`, press **Load sample input**, then **Analyze Invoice**: the worked example runs without preparing any data.
+
+Prefer `npm` muscle memory? `frontend/package.json` ships thin wrapper scripts (the frontend itself stays dependency-free; these only drive the Python server):
+
+```bash
+cd frontend
+npm run setup   # one-time: creates .venv and installs backend requirements
+npm run dev     # uvicorn with hot reload → http://localhost:8000
+npm test        # backend test suite
+```
+
+The pages themselves (`index.html`, `app.html`) are plain HTML/CSS/JS with no build step.</think><tool_call>edit<arg_key>newString</arg_key><arg_value>Open `http://localhost:8000`, press **Load sample input**, then **Analyze Invoice**: the worked example runs without preparing any data.
 
 Run the tests:
 

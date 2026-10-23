@@ -1,0 +1,13 @@
+{
+  "name": "invoiceguard-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "InvoiceGuard AI frontend: dependency-free vanilla HTML/CSS/JS, served by the FastAPI backend. These npm scripts are wrappers around the Python server; there are no frontend dependencies to install.",
+  "scripts": {
+    "setup": "cd .. && python3 -m venv .venv && .venv/bin/pip install -r backend/requirements.txt",
+    "dev": "cd .. && .venv/bin/uvicorn backend.app.main:app --reload --port 8000",
+    "start": "cd .. && .venv/bin/uvicorn backend.app.main:app --port 8000",
+    "dev:static": "python3 -m http.server 5173",
+    "test": "cd .. && .venv/bin/python -m pytest backend/tests -q"
+  }
+}
