@@ -3,9 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>InvoiceGuard AI — Invoice ↔ PO mismatch detector</title>
+  <title>InvoiceGuard AI · Invoice vs PO mismatch detector</title>
   <meta name="description" content="Compares supplier invoices against Purchase Orders with semantic matching and deterministic financial validation." />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="/style.css" />
 </head>
@@ -20,24 +23,31 @@
         <a href="#features">Features</a>
         <a href="#how">How it works</a>
         <a href="#checks">What it checks</a>
+        <a href="#pricing">Pricing</a>
         <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
       </nav>
-      <div class="header-right">
+      <div class="nav-right">
+        <a class="icon-circle" href="/docs" target="_blank" rel="noopener" title="Interactive API docs" aria-label="API documentation">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 4.5v15Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 7h7M9 11h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </a>
+        <a class="icon-circle" href="https://github.com/Kaushalendra-Marcus/InvoiceGuard-AI" target="_blank" rel="noopener" title="Source code on GitHub" aria-label="GitHub repository">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.56 9.56 0 0 1 5 0c1.91-1.3 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.85-2.34 4.7-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z" fill="currentColor"/></svg>
+        </a>
         <div class="usage-pill" id="usage-pill" title="Daily allowance for this anonymous session">
           <svg class="usage-icon" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
             <path d="m9 12 2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          <span id="usage-text">Daily analyses remaining: – / 10</span>
+          <span id="usage-text">10 / 10 analyses left</span>
         </div>
-        <a class="btn primary pill header-cta" href="#workbench">Analyze an invoice</a>
       </div>
     </div>
   </header>
 
   <main class="container">
     <section class="hero">
-      <div class="hero-copy">
+      <div class="hero-copy" data-reveal>
         <span class="hero-badge">
           <span class="badge-dot" aria-hidden="true">
             <svg viewBox="0 0 24 24"><path d="m8.5 12.5 2.5 2.5 4.5-5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -46,7 +56,7 @@
         </span>
         <h1>Stop paying wrong invoices.<br/>Catch what string&nbsp;matching and semantic&nbsp;matching both miss.</h1>
         <p>
-          The same product shows up with a different description — and invoices quietly drift
+          The same product shows up with a different description and invoices quietly drift
           on <strong>quantity</strong> and <strong>price</strong>. InvoiceGuard AI recognizes the
           product across wording differences, then validates the numbers with deterministic rules,
           and routes anything unsafe to a human.
@@ -57,15 +67,15 @@
         </div>
         <div class="hero-stats">
           <div class="stat">
-            <span class="stat-value">10</span>
+            <span class="stat-value" data-count="10">10</span>
             <span class="stat-label">free analyses a day</span>
           </div>
           <div class="stat">
-            <span class="stat-value">0</span>
+            <span class="stat-value" data-count="0">0</span>
             <span class="stat-label">external AI calls, all local</span>
           </div>
           <div class="stat">
-            <span class="stat-value">3</span>
+            <span class="stat-value" data-count="3">3</span>
             <span class="stat-label">verdict states, evidence-backed</span>
           </div>
         </div>
@@ -75,19 +85,38 @@
       </div>
     </section>
 
+    <section class="trust-strip" data-reveal aria-label="What this tool guarantees">
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="m9 12 2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div><b>Runs fully local</b><span>No data leaves the host</span></div>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <div><b>Anonymous by design</b><span>No sign-up, no tracking</span></div>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><line x1="9" y1="7" x2="15" y2="7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><line x1="9" y1="11" x2="15" y2="11" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><line x1="9" y1="15" x2="11" y2="15" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><line x1="13" y1="15" x2="15" y2="15" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <div><b>Exact money math</b><span>Decimal arithmetic, no float drift</span></div>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 12h6M9 16h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <div><b>Evidence on every verdict</b><span>Originals plus recomputation</span></div>
+      </div>
+    </section>
+
     <section class="section-block" id="features">
-      <div class="section-head">
+      <div class="section-head" data-reveal>
         <span class="kicker">Features</span>
         <h2>Everything you need to catch over-billing</h2>
         <p>A focused evaluation loop: read both documents, match the lines, validate the money, and show the evidence for every decision.</p>
       </div>
-      <div class="fe-grid">
+      <div class="fe-grid" data-reveal-stagger>
         <article class="card fe">
           <div class="fe-icon">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
           </div>
           <h3>Semantic line matching</h3>
-          <p class="muted">The same product found across reworded lines — USB-C Cable, 1 Meter vs Type-C Charging Cable, 100cm — scored by a local embedding model.</p>
+          <p class="muted">The same product found across reworded lines: USB-C Cable, 1 Meter vs Type-C Charging Cable, 100cm, scored by a local embedding model.</p>
         </article>
         <article class="card fe">
           <div class="fe-icon">
@@ -101,7 +130,7 @@
             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m8.5 12.5 2.5 2.5 4.5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
           <h3>Totals cross-checks</h3>
-          <p class="muted">Every line total must equal quantity × price, and the stated subtotal is re-added — failures are reported line by line.</p>
+          <p class="muted">Every line total must equal quantity × price, and the stated subtotal is re-added. Failures are reported line by line.</p>
         </article>
         <article class="card fe">
           <div class="fe-icon">
@@ -128,16 +157,16 @@
     </section>
 
     <section class="section-block" id="how">
-      <div class="section-head">
+      <div class="section-head" data-reveal>
         <span class="kicker">How it works</span>
         <h2>Three steps, one verdict</h2>
         <p>No configuration, no flowcharts to draw. Provide both documents and get a decision with evidence.</p>
       </div>
-      <ol class="steps">
+      <ol class="steps" data-reveal-stagger>
         <li class="card step">
           <span class="step-chip" aria-hidden="true">01</span>
           <h3>Upload both documents</h3>
-          <p class="muted">Invoice as a PDF or image. Purchase Order as JSON or CSV — or load the bundled sample. Nothing to configure.</p>
+          <p class="muted">Invoice as a PDF or image. Purchase Order as JSON or CSV, or load the bundled sample. Nothing to configure.</p>
         </li>
         <li class="card step">
           <span class="step-chip" aria-hidden="true">02</span>
@@ -147,18 +176,18 @@
         <li class="card step">
           <span class="step-chip" aria-hidden="true">03</span>
           <h3>Validate, then decide</h3>
-          <p class="muted">Quantities, unit prices and totals are recomputed. You get <code>MATCHED</code>, <code>DISCREPANCY_FOUND</code> or <code>NEEDS_REVIEW</code> — with the numbers.</p>
+          <p class="muted">Quantities, unit prices and totals are recomputed. You get <code>MATCHED</code>, <code>DISCREPANCY_FOUND</code> or <code>NEEDS_REVIEW</code>, with the numbers.</p>
         </li>
       </ol>
     </section>
 
     <section class="section-block" id="checks">
-      <div class="section-head">
+      <div class="section-head" data-reveal>
         <span class="kicker">Under the hood</span>
         <h2>What gets checked, side by side</h2>
         <p>No verdict appears without a basis. This is the full list of deterministic checks and what happens when one fails.</p>
       </div>
-      <div class="table-card">
+      <div class="table-card" data-reveal>
         <div class="checks-scroll">
           <table class="checks-table">
             <thead>
@@ -169,56 +198,103 @@
               <tr><td>Unit price</td><td>Invoiced unit price against the PO price for the same line</td><td><code>DISCREPANCY_FOUND</code> with both prices shown side by side</td></tr>
               <tr><td>Line total</td><td>Stated line total against quantity × unit price</td><td><code>DISCREPANCY_FOUND</code> with the recomputed line total</td></tr>
               <tr><td>Stated subtotal</td><td>Invoice subtotal against the sum of extracted line totals</td><td><code>DISCREPANCY_FOUND</code> with the recomputed subtotal</td></tr>
-              <tr><td>Currency</td><td>Invoice currency against PO currency</td><td>Comparison basis suppressed and routed to review — no silent conversion</td></tr>
-              <tr><td>Quantity unit</td><td>Declared units on both documents (pcs, meters, kg...)</td><td><code>NEEDS_REVIEW</code> plus a validation note — no invented conversion</td></tr>
-              <tr><td>Missing values</td><td>Presence of quantity, unit price and totals on both sides</td><td><code>NEEDS_REVIEW</code> — totals and all figures are never guessed</td></tr>
+              <tr><td>Currency</td><td>Invoice currency against PO currency</td><td>Comparison basis suppressed and routed to review, no silent conversion</td></tr>
+              <tr><td>Quantity unit</td><td>Declared units on both documents (pcs, meters, kg...)</td><td><code>NEEDS_REVIEW</code> plus a validation note, no invented conversion</td></tr>
+              <tr><td>Missing values</td><td>Presence of quantity, unit price and totals on both sides</td><td><code>NEEDS_REVIEW</code>, totals and all figures are never guessed</td></tr>
             </tbody>
           </table>
         </div>
       </div>
     </section>
 
-    <section class="section-block" id="faq">
-      <div class="section-head">
-        <span class="kicker">FAQ</span>
-        <h2>Straight answers</h2>
-        <p>How the tool works and what happens to your data — the short versions.</p>
+    <section class="section-block" id="cases">
+      <div class="section-head" data-reveal>
+        <span class="kicker">Who it is for</span>
+        <h2>Built for the people who sign off on payments</h2>
+        <p>One narrow job: read both documents, prove the match, validate every figure, and escalate whatever a human should decide.</p>
       </div>
-      <div class="faq-list">
-        <details class="faq">
-          <summary>What happens to my documents?</summary>
-          <p class="muted">The invoice and Purchase Order are processed in memory only — extraction, matching and validation produce the report, and nothing about the documents is written to disk. The only stored state is the anonymous daily allowance counter row for your session.</p>
-        </details>
-        <details class="faq">
-          <summary>Is any data sent to an external AI service?</summary>
-          <p class="muted">No. Semantic matching runs on a local ONNX embedding model (bge-small via fastembed). There is no external API key, no per-request cost, and no data leaves the machine.</p>
-        </details>
-        <details class="faq">
-          <summary>Why does a suspicious invoice get NEEDS_REVIEW instead of REJECTED?</summary>
-          <p class="muted">When the evidence is insufficient (ambiguous candidates, contradictory SKUs or units, missing values), claiming a hard verdict would be guessing. The tool names exactly what is unclear and leaves the decision to a finance reviewer.</p>
-        </details>
-        <details class="faq">
-          <summary>Which files are supported?</summary>
-          <p class="muted">Invoices: PDF, PNG, JPG/JPEG, WEBP (up to 10 MB). Purchase Orders: JSON or CSV files, or pasted/text-edited JSON directly in the workbench.</p>
-        </details>
-        <details class="faq">
-          <summary>What does the 10-per-day limit actually mean?</summary>
-          <p class="muted">Each browser session gets 10 successful analyses per calendar day (Asia/Kolkata, reset at midnight IST). Failed analyses and rejected uploads never consume the allowance. Clearing browser storage starts a session with a fresh counter.</p>
-        </details>
-      </div>
-    </section>
-
-    <section class="cta-band">
-      <div class="container cta-inner">
-        <div class="cta-copy">
-          <h2>Ready to stop paying wrong invoices?</h2>
-          <p>Load the bundled sample or your own documents — anonymous, local and free while the prototype runs.</p>
-        </div>
-        <a class="btn primary pill btn-lg" href="#workbench">Analyze an invoice</a>
+      <div class="case-grid" data-reveal-stagger>
+        <article class="card case">
+          <div class="case-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="7" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Accounts Payable reviewers</h3>
+          <p class="muted">Validate supplier invoices against the committed PO before the payment batch goes out, with every quantity and price recomputed from the agreed contract.</p>
+        </article>
+        <article class="card case">
+          <div class="case-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Founders and operations teams</h3>
+          <p class="muted">Catch silent over-billing early without standing up a full enterprise procurement suite. Load an invoice and a PO, get a decision with the numbers.</p>
+        </article>
+        <article class="card case">
+          <div class="case-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m9 14 2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Finance teams evaluating tooling</h3>
+          <p class="muted">See the matching and validation approach end to end on real documents before committing to a platform or writing the requirement spec.</p>
+        </article>
       </div>
     </section>
 
-    <section class="workbench" id="workbench">
+    <section class="section-block" id="pricing">
+      <div class="section-head" data-reveal>
+        <span class="kicker">Pricing</span>
+        <h2>Simple, transparent pricing</h2>
+        <p>The complete analyzer is free today. Paid tiers are the roadmap for teams and institutions.</p>
+      </div>
+      <div class="billing-toggle" role="tablist" aria-label="Billing period">
+        <button class="active" data-billing="monthly" type="button">Monthly</button>
+        <button data-billing="annual" type="button">Annual &#183; save 20%</button>
+      </div>
+      <div class="pricing-grid" data-reveal-stagger>
+        <article class="price-card tint">
+          <h3 class="plan-name">Starter</h3>
+          <p class="plan-sub">For individuals evaluating the workflow.</p>
+          <div class="price-row"><span class="price-amount">$0</span><span class="price-cyc">/ forever</span></div>
+          <ul class="plan-features">
+            <li><svg class="check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 13 4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Full matching and validation engine</li>
+            <li><svg class="check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 13 4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>10 analyses per day, anonymized</li>
+            <li><svg class="check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 13 4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>PDF, JSON and CSV inputs</li>
+            <li><svg class="check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 13 4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>No sign-up, no data retention</li>
+          </ul>
+          <a class="btn dark block" href="#workbench">Start analyzing</a>
+        </article>
+
+        <article class="price-card pro">
+          <h3 class="plan-name">Pro</h3>
+          <p class="plan-sub">For finance teams that process weekly.</p>
+          <div class="price-row">
+            <span class="price-amount"><sup>$</sup><span id="pro-price">29</span></span><span class="price-cyc" id="pro-suffix">/ mo</span>
+          </div>
+          <p class="price-note" id="pro-note">billed monthly</p>
+          <ul class="plan-features">
+            <li><svg class="check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 13 4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>500 analyses per day <em>(planned)</em></li>
+            <li><svg class="check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 13 4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Appraisal-ready exports <em>(planned)</em></li>
+            <li><svg class="check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 13 4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Multi-user review queue <em>(planned)</em></li>
+            <li><svg class="check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 13 4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Priority support <em>(planned)</em></li>
+          </ul>
+          <a class="btn light block" href="#contact">Join the waitlist</a>
+        </article>
+
+        <article class="price-card tint">
+          <h3 class="plan-name">Enterprise</h3>
+          <p class="plan-sub">For institutions with procurement controls.</p>
+          <div class="price-row"><span class="price-amount">Custom</span></div>
+          <ul class="plan-features">
+            <li><svg class="check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 13 4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>On-premise deployment <em>(planned)</em></li>
+            <li><svg class="check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 13 4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Nothing leaves your host</li>
+            <li><svg class="check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 13 4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Custom thresholds and units</li>
+            <li><svg class="check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 13 4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>SSO integration <em>(planned)</em></li>
+          </ul>
+          <a class="btn dark block" href="#contact">Talk to us</a>
+        </article>
+      </div>
+      <p class="pricing-note">Everything marked <em>(planned)</em> is roadmap scope for this prototype; the free plan works in full today.</p>
+    </section>
+
+    <section class="workbench" id="workbench" data-reveal>
       <h2>Analyze an invoice against its Purchase Order</h2>
       <div class="input-grid">
         <div class="card" id="invoice-card">
@@ -275,7 +351,7 @@ PO-2024-0042,INR,CBL-USB-C-1M,USB-C Cable 1 Meter,100,pcs,150.00"></textarea>
         <button id="btn-analyze" class="btn primary" type="button">Analyze Invoice</button>
       </div>
       <p class="muted small" id="form-hint">
-        Anonymous session <code id="session-preview"></code> — 10 successful analyses per day, resets at midnight IST.
+        Anonymous session <code id="session-preview"></code>, 10 successful analyses per day, resets at midnight IST.
       </p>
       <div id="error-banner" class="banner error hidden"></div>
       <div id="loading" class="loading hidden">
@@ -288,7 +364,7 @@ PO-2024-0042,INR,CBL-USB-C-1M,USB-C Cable 1 Meter,100,pcs,150.00"></textarea>
       <div class="status-banner" id="status-banner">
         <div>
           <div class="status-label">Status</div>
-          <div class="status-value" id="status-value">—</div>
+          <div class="status-value" id="status-value">&middot;</div>
         </div>
         <div class="status-meta">
           <p id="status-summary"></p>
@@ -313,43 +389,116 @@ PO-2024-0042,INR,CBL-USB-C-1M,USB-C Cable 1 Meter,100,pcs,150.00"></textarea>
       </details>
     </section>
 
+    <section class="section-block" id="faq">
+      <div class="section-head" data-reveal>
+        <span class="kicker">FAQ</span>
+        <h2>Questions people actually ask</h2>
+        <p>Short, straight answers about how the engine works and what it does with your documents.</p>
+      </div>
+      <div class="faq-list" data-reveal-stagger>
+        <details class="faq">
+          <summary>Does any document leave my machine?</summary>
+          <p>No. Parsing, embedding and validation all run in-process on the machine serving the page. The semantic encoder is a small local ONNX model (BAAI/bge-small-en-v1.5); there are no calls to external AI services.</p>
+        </details>
+        <details class="faq">
+          <summary>What are the three verdicts?</summary>
+          <p><code>MATCHED</code> (checked and consistent), <code>DISCREPANCY_FOUND</code> (a reliable match with a quantity, price or totals conflict) and <code>NEEDS_REVIEW</code> (weak evidence, incompatible units or currency, or missing data). <code>NEEDS_REVIEW</code> always wins when the numbers would be unsafe to compare.</p>
+        </details>
+        <details class="faq">
+          <summary>What formats does it accept?</summary>
+          <p>Invoices: PDF, PNG, JPG or WEBP up to 10 MB. Purchase orders: JSON or CSV, pasted inline or uploaded as a file. A bundled sample runs the full worked example with one click.</p>
+        </details>
+        <details class="faq">
+          <summary>How are the 10 analyses a day enforced?</summary>
+          <p>Server-side. Each anonymous browser session reserves its allowance atomically before analysis starts, so concurrent requests cannot double-spend, and the counter resets at midnight IST.</p>
+        </details>
+        <details class="faq">
+          <summary>Can I use this to approve payments?</summary>
+          <p>No. A <code>MATCHED</code> result is informational support for a reviewer; it is never a payment authorization. The prototype states that boundary in the interface, in the tests and on this page.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="section-block" id="contact">
+      <div class="section-head" data-reveal>
+        <span class="kicker">Contact us</span>
+        <h2>Get in touch</h2>
+        <p>Questions about the matching engine, deployment, or procurement? Send a note or open an issue.</p>
+      </div>
+      <div class="contact-grid" data-reveal-stagger>
+        <form id="contact-form" novalidate>
+          <div class="field">
+            <label for="contact-name">Full name</label>
+            <input id="contact-name" name="name" type="text" placeholder="Enter your full name..." autocomplete="name" />
+          </div>
+          <div class="field">
+            <label for="contact-email">Email address</label>
+            <input id="contact-email" name="email" type="email" placeholder="Enter your email address..." autocomplete="email" />
+          </div>
+          <div class="field">
+            <label for="contact-subject">Subject</label>
+            <select id="contact-subject" name="subject">
+              <option value="" selected disabled>Select a subject...</option>
+              <option>Deploying InvoiceGuard internally</option>
+              <option>Matching or validation question</option>
+              <option>Report a bug</option>
+              <option>Feature request</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="contact-message">Message</label>
+            <textarea id="contact-message" name="message" placeholder="How can we help?"></textarea>
+          </div>
+          <button class="btn dark" type="submit">Send message</button>
+          <div id="contact-note" class="banner info hidden" role="status"></div>
+        </form>
+
+        <aside class="contact-aside">
+          <div class="info-card">
+            <span class="info-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.56 9.56 0 0 1 5 0c1.91-1.3 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.85-2.34 4.7-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z" fill="currentColor"/></svg>
+            </span>
+            <div>
+              <h4>Source code</h4>
+              <p>Every check is auditable on GitHub.</p>
+            </div>
+          </div>
+          <div class="info-card">
+            <span class="info-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            </span>
+            <div>
+              <h4>Issues &amp; feedback</h4>
+              <p>Bug reports and feature requests welcome.</p>
+            </div>
+          </div>
+          <div class="info-card">
+            <span class="info-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M8 6h8M8 10h8M8 14h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            </span>
+            <div>
+              <h4>Interactive API</h4>
+              <p><a href="/docs" target="_blank" rel="noopener">/docs</a>, OpenAPI playground for every endpoint.</p>
+            </div>
+          </div>
+          <div class="run-card" aria-label="Run InvoiceGuard locally">
+            <span class="run-title">RUN IT LOCALLY</span>
+            <pre><code>git clone https://github.com/Kaushalendra-Marcus/InvoiceGuard-AI.git
+cd InvoiceGuard-AI
+python -m venv .venv &amp;&amp; .venv/bin/pip install -r backend/requirements.txt
+.venv/bin/uvicorn backend.app.main:app</code></pre>
+          </div>
+        </aside>
+      </div>
+    </section>
+
     <footer class="site-footer">
-      <div class="container footer-grid">
-        <div class="footer-brand">
-          <a class="brand" href="/">
-            <img src="/assets/logo.png" alt="InvoiceGuard AI logo" class="brand-logo" />
-            <span class="brand-name">InvoiceGuard <em>AI</em></span>
-          </a>
-          <p class="muted">
-            Catch invoice&#8211;PO mismatches before payment: semantic line matching plus
-            deterministic decimal validation, running fully local.
-          </p>
-        </div>
-        <div class="footer-col">
-          <h4>Product</h4>
-          <a href="#features">Features</a>
-          <a href="#how">How it works</a>
-          <a href="#checks">What it checks</a>
-          <a href="#faq">FAQ</a>
-          <a href="#workbench">Workbench</a>
-        </div>
-        <div class="footer-col">
-          <h4>Resources</h4>
-          <a href="/docs" target="_blank" rel="noopener">API docs</a>
-          <a href="https://github.com/Kaushalendra-Marcus/InvoiceGuard-AI" target="_blank" rel="noopener">GitHub repository</a>
-          <a href="https://github.com/Kaushalendra-Marcus/InvoiceGuard-AI/issues" target="_blank" rel="noopener">Report an issue</a>
-        </div>
-        <div class="footer-col">
-          <h4>Details</h4>
-          <span class="muted">Prototype v0.1</span>
-          <span class="muted">10 analyses a day, anonymous</span>
-          <span class="muted">All inference runs locally</span>
-        </div>
-      </div>
-      <div class="container footer-bottom">
-        <span>&copy; 2026 Kaushalendra &#183; InvoiceGuard AI</span>
-        <span>A MATCHED verdict is a finding, never a payment authorization.</span>
-      </div>
+      <p>
+        InvoiceGuard AI is a focused prototype: a MATCHED result is informational support for
+        reviewers and <strong>never authorizes payment</strong>.
+        <a href="/docs" target="_blank" rel="noopener">API docs</a> ·
+        <a href="https://github.com/Kaushalendra-Marcus/InvoiceGuard-AI" target="_blank" rel="noopener">GitHub</a>
+      </p>
     </footer>
   </main>
   <script src="/app.js"></script>

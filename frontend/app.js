@@ -1,4 +1,4 @@
-/* InvoiceGuard AI — single-page analyzer.
+/* InvoiceGuard AI: single-page analyzer.
  * Anonymous session: random ID generated once, stored in localStorage,
  * sent with every request; the *server* enforces the daily limit.
  */
@@ -82,12 +82,12 @@ els.sessionPreview.textContent = sessionId.slice(0, 13) + "…";
 /* ------------------------------------------------------------ usage pill */
 function renderUsage(usage) {
   if (!usage) return;
-  els.usageText.textContent = `Daily analyses remaining: ${usage.remaining_validations} / ${usage.daily_limit}`;
+  els.usageText.textContent = `${usage.remaining_validations} / ${usage.daily_limit} analyses left`;
   const exhausted = usage.remaining_validations === 0;
   els.usagePill.classList.toggle("exhausted", exhausted);
   els.analyzeBtn.disabled = exhausted;
   els.analyzeBtn.title = exhausted
-    ? "Daily limit reached for this anonymous session — resets at midnight IST."
+    ? "Daily limit reached for this anonymous session, resets at midnight IST."
     : "";
 }
 
@@ -210,7 +210,7 @@ els.sampleBtn.addEventListener("click", async () => {
   } catch (_) { /* fall through to message */ }
   setError(
     'The bundled sample invoice (served at <code>/assets/invoice_sample.pdf</code>) is not ' +
-      "available — start the backend or open an issue if the file is missing from your copy."
+      "available; start the backend or open an issue if the file is missing from your copy."
   );
 });
 
@@ -382,3 +382,97 @@ function prettify(type) {
 }
 
 refreshUsage();
+
+/* ------------------------------------------------- pricing billing toggle */
+const billingButtons = document.querySelectorAll(".billing-toggle [data-billing]");
+if (billingButtons.length) {
+  const proPrice = $("pro-price");
+  const proNote = $("pro-note");
+  billingButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      billingButtons.forEach((b) => b.classList.toggle("active", b === btn));
+      const annual = btn.dataset.billing === "annual";
+      if (proPrice) proPrice.textContent = annual ? "23" : "29";
+      if (proNote) proNote.textContent = annual ? "billed annually, save 20%" : "billed monthly";
+    });
+  });
+}
+
+/* ------------------------------------------------------------ contact form */
+const contactForm = $("contact-form");
+const contactNote = $("contact-note");
+if (contactForm && contactNote) {
+  contactForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    contactNote.innerHTML =
+      "This prototype build does not send e-mail. Please open a " +
+      '<a href="https://github.com/Kaushalendra-Marcus/InvoiceGuard-AI/issues" target="_blank" rel="noopener">GitHub issue</a> ' +
+      "and the maintainer will get back to you.";
+    contactNote.classList.remove("hidden");
+    contactNote.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
+  contactForm.addEventListener("input", () => contactNote.classList.add("hidden"));
+}
+
+/* -------------------------------------------------------
+ * production polish: reveal-on-scroll, header elevation, stat count-up */
+(function polish() {
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function activate(el) { el.classList.add("in"); }
+
+  function observe(el) {
+    if (!("IntersectionObserver" in window)) { activate(el); return; }
+    const io = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          activate(entry.target);
+          io.unobserve(entry.target);
+        }
+      }
+    }, { threshold: 0.1, rootMargin: "0px 0px -6% 0px" });
+    io.observe(el);
+  }
+
+  const revealTargets = document.querySelectorAll("[data-reveal], [data-reveal-stagger]");
+  revealTargets.forEach((el) => {
+    if (reduced) { activate(el); } else { observe(el); }
+  });
+
+  /* sticky header gets a shadow once the page scrolls */
+  const header = document.querySelector(".site-header");
+  const onScroll = () => {
+    if (header) header.classList.toggle("scrolled", window.scrollY > 8);
+  };
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  /* hero stats count up the first time they are seen */
+  function countUp(el) {
+    const target = Number(el.dataset.count || "0");
+    const start = performance.now();
+    const dur = 900;
+    function frame(t) {
+      const k = Math.min(1, (t - start) / dur);
+      const eased = 1 - Math.pow(1 - k, 3);
+      el.textContent = String(Math.round(target * eased));
+      if (k < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  const statValues = document.querySelectorAll("[data-count]");
+  if (reduced || !("IntersectionObserver" in window)) {
+    statValues.forEach((el) => { el.textContent = String(Number(el.dataset.count || "0")); });
+  } else {
+    const co = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          countUp(entry.target);
+          co.unobserve(entry.target);
+        }
+      }
+    }, { threshold: 0.5 });
+    statValues.forEach((el) => co.observe(el));
+  }
+})();
