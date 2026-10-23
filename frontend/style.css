@@ -103,7 +103,7 @@ h1, h2, h3, h4 { font-weight: 800; }
   color: #fff; display: inline-flex; align-items: center; justify-content: center;
 }
 .hero-badge .badge-dot svg { width: 12px; height: 12px; }
-.hero-art img { width: 140%; max-width: none; height: auto; display: block; margin-left: -40%; }
+.hero-art img { width: 145%; max-width: none; height: auto; display: block; margin-left: -45%; }
 
 /* hero CTA pair (solid pill + outline pill, like the reference) */
 .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin: 0 0 6px; }
@@ -480,18 +480,7 @@ html { scroll-behavior: smooth; scroll-padding-top: 84px; }
   background: radial-gradient(closest-side, rgba(37, 99, 235, 0.12), rgba(37, 99, 235, 0) 72%);
   pointer-events: none;
 }
-.hero-art img {
-  position: relative;
-  animation: heroIn .8s cubic-bezier(.22, .61, .36, 1) both, heroFloat 7s ease-in-out 1.4s infinite;
-}
-@keyframes heroIn {
-  from { opacity: 0; transform: translateY(16px) scale(0.985); }
-  to { opacity: 1; transform: none; }
-}
-@keyframes heroFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-7px); }
-}
+.hero-art img { position: relative; }
 
 /* ------------------------------------------------------- trust strip */
 .trust-strip {
@@ -568,7 +557,6 @@ details.faq p { margin: 0 0 16px; color: var(--muted); font-size: 14px; animatio
 /* ------------------------------------------------------- reduced motion */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .hero-art img { animation: none; }
   [data-reveal], [data-reveal-stagger] > * { opacity: 1; transform: none; transition: none; }
   .fe, .step, .case, .price-card, .faq, .site-header, .btn, .dropzone, .tab, .billing-toggle button, details.faq p {
     transition: none !important; animation: none !important;
