@@ -77,7 +77,7 @@ function getSessionId() {
   return sid;
 }
 const sessionId = getSessionId();
-els.sessionPreview.textContent = sessionId.slice(0, 13) + "…";
+if (els.sessionPreview) els.sessionPreview.textContent = sessionId.slice(0, 13) + "…";
 
 /* ------------------------------------------------------------ usage pill */
 function renderUsage(usage) {
@@ -85,10 +85,12 @@ function renderUsage(usage) {
   els.usageText.textContent = `${usage.remaining_validations} / ${usage.daily_limit} analyses left`;
   const exhausted = usage.remaining_validations === 0;
   els.usagePill.classList.toggle("exhausted", exhausted);
-  els.analyzeBtn.disabled = exhausted;
-  els.analyzeBtn.title = exhausted
-    ? "Daily limit reached for this anonymous session, resets at midnight IST."
-    : "";
+  if (els.analyzeBtn) {
+    els.analyzeBtn.disabled = exhausted;
+    els.analyzeBtn.title = exhausted
+      ? "Daily limit reached for this anonymous session, resets at midnight IST."
+      : "";
+  }
 }
 
 async function refreshUsage() {
@@ -126,9 +128,9 @@ function syncPoFileState() {
   els.poFileName.textContent = has ? `\uD83D\uDCC4 ${els.poFile.files[0].name}` : "";
   els.poFileName.classList.toggle("hidden", !has);
 }
-els.poFile.addEventListener("change", syncPoFileState);
+if (els.poFile) els.poFile.addEventListener("change", syncPoFileState);
 const poFileBtn = $("po-file-btn");
-if (poFileBtn) poFileBtn.addEventListener("click", () => els.poFile.click());
+if (poFileBtn && els.poFile) poFileBtn.addEventListener("click", () => els.poFile.click());
 
 function currentPoSource() {
   const jsonHidden = els.poJson.classList.contains("hidden");
@@ -151,38 +153,32 @@ function styleDropzone() {
     ? els.invoiceFile.files[0].name
     : "Choose a PDF or image, or drop it here";
 }
-els.invoiceFile.addEventListener("change", styleDropzone);
-
-/* PO file picker (Upload file tab) */
-els.poFileBtn.addEventListener("click", () => els.poFile.click());
-els.poFile.addEventListener("change", () => {
-  const has = els.poFile.files.length > 0;
-  els.poFileName.classList.toggle("hidden", !has);
-  els.poFileInput.classList.toggle("has-file", has);
-  els.poFileName.textContent = has ? els.poFile.files[0].name : "";
-});
+if (els.invoiceFile) els.invoiceFile.addEventListener("change", styleDropzone);
 ["dragover", "dragenter"].forEach((ev) =>
-  els.dropzone.addEventListener(ev, (e) => {
+  els.dropzone && els.dropzone.addEventListener(ev, (e) => {
     e.preventDefault();
     els.dropzone.classList.add("drag");
   })
 );
 ["dragleave", "drop"].forEach((ev) =>
-  els.dropzone.addEventListener(ev, (e) => {
+  els.dropzone && els.dropzone.addEventListener(ev, (e) => {
     e.preventDefault();
     els.dropzone.classList.remove("drag");
   })
 );
-els.dropzone.addEventListener("drop", (e) => {
-  if (e.dataTransfer.files.length) {
-    const dt = new DataTransfer();
-    dt.items.add(e.dataTransfer.files[0]);
-    els.invoiceFile.files = dt.files;
-    styleDropzone();
-  }
-});
+if (els.dropzone) {
+  els.dropzone.addEventListener("drop", (e) => {
+    if (e.dataTransfer.files.length) {
+      const dt = new DataTransfer();
+      dt.items.add(e.dataTransfer.files[0]);
+      els.invoiceFile.files = dt.files;
+      styleDropzone();
+    }
+  });
+}
 
 /* ------------------------------------------------------------ sample load */
+if (els.sampleBtn) {
 els.sampleBtn.addEventListener("click", async () => {
   // Activate the JSON tab the same way a click would, so state stays honest.
   document.querySelectorAll(".tab").forEach((t) => t.classList.remove("active"));
@@ -213,6 +209,7 @@ els.sampleBtn.addEventListener("click", async () => {
       "available; start the backend or open an issue if the file is missing from your copy."
   );
 });
+}
 
 /* ----------------------------------------------------------------- submit */
 function setError(message, recoverable = false) {
@@ -229,6 +226,7 @@ function setLoading(on) {
   els.analyzeBtn.disabled = on;
 }
 
+els.analyzeBtn &&
 els.analyzeBtn.addEventListener("click", async () => {
   clearError();
   els.resultSection.classList.add("hidden");
