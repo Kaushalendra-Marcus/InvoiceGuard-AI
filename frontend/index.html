@@ -23,7 +23,6 @@
         <a href="#features">Features</a>
         <a href="#how">How it works</a>
         <a href="#checks">What it checks</a>
-        <a href="/docs" target="_blank" rel="noopener">Docs</a>
       </nav>
       <div class="nav-right">
         <a class="icon-circle" href="/docs" target="_blank" rel="noopener" title="Interactive API docs" aria-label="API documentation">
@@ -60,7 +59,7 @@
           and routes anything unsafe to a human.
         </p>
         <div class="hero-actions">
-          <a class="btn primary pill" href="#workbench">Analyze an invoice</a>
+          <a class="btn primary pill" href="/app.html">Analyze an invoice</a>
           <a class="btn ghost pill" href="#features">What it catches</a>
         </div>
         <div class="hero-stats">
@@ -257,7 +256,7 @@
             <li><svg class="check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 13 4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>PDF, JSON and CSV inputs</li>
             <li><svg class="check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 13 4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>No sign-up, no data retention</li>
           </ul>
-          <a class="btn dark block" href="#workbench">Start analyzing</a>
+          <a class="btn dark block" href="/app.html">Start analyzing</a>
         </article>
 
         <article class="price-card pro">
@@ -292,100 +291,13 @@
       <p class="pricing-note">Everything marked <em>(planned)</em> is roadmap scope for this prototype; the free plan works in full today.</p>
     </section>
 
-    <section class="workbench" id="workbench" data-reveal>
-      <h2>Analyze an invoice against its Purchase Order</h2>
-      <div class="input-grid">
-        <div class="card" id="invoice-card">
-          <div class="card-head">
-            <span class="card-icon">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 2v6h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 13h6M9 17h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-            </span>
-            <div>
-              <h3>Invoice</h3>
-              <p class="muted">PDF or image. Fields are extracted automatically.</p>
-            </div>
-          </div>
-          <label class="dropzone" id="invoice-dropzone" for="invoice-file">
-            <input type="file" id="invoice-file" accept=".pdf,.png,.jpg,.jpeg,.webp" />
-            <p id="invoice-file-name" class="dropzone-text">Choose a PDF or image, or drop it here</p>
-          </label>
-        </div>
-
-        <div class="card" id="po-card">
-          <div class="card-head">
-            <span class="card-icon">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="4.5" r="1.6" fill="currentColor"/><circle cx="15" cy="4.5" r="1.6" fill="currentColor"/><circle cx="9" cy="19.5" r="1.6" fill="currentColor"/></svg>
-            </span>
-            <div>
-              <h3>Purchase Order</h3>
-              <p class="muted">Structured JSON or CSV.</p>
-            </div>
-          </div>
-          <div class="po-tabs" role="tablist">
-            <button class="tab active" data-tab="json" type="button">JSON</button>
-            <button class="tab" data-tab="csv" type="button">CSV</button>
-            <button class="tab" data-tab="file" type="button">Upload file</button>
-          </div>
-          <div class="po-file-shell hidden" id="po-file-shell">
-            <button class="btn ghost btn-sm" id="po-file-btn" type="button">Choose a .json or .csv file</button>
-            <span id="po-file-name" class="po-file-name muted small hidden"></span>
-            <input type="file" id="po-file" accept=".json,.csv" hidden />
-          </div>
-          <textarea id="po-json" class="po-editor mono" placeholder='{
-  "po_number": "PO-2024-0042",
-  "currency": "INR",
-  "items": [
-    {"description": "USB-C Cable, 1 Meter", "sku": "CBL-USB-C-1M",
-     "quantity": 100, "quantity_unit": "pcs", "unit_price": 150.00}
-  ]
-}'></textarea>
-          <textarea id="po-csv" class="po-editor mono hidden" placeholder="po_number,currency,sku,description,quantity,unit,unit_price
-PO-2024-0042,INR,CBL-USB-C-1M,USB-C Cable 1 Meter,100,pcs,150.00"></textarea>
-        </div>
-      </div>
-
-      <div class="actions-row">
-        <button id="btn-sample" class="btn ghost" type="button">Load sample input</button>
-        <button id="btn-analyze" class="btn primary" type="button">Analyze Invoice</button>
-      </div>
-      <p class="muted small" id="form-hint">
-        Anonymous session <code id="session-preview"></code>, 10 successful analyses per day, resets at midnight IST.
-      </p>
-      <div id="error-banner" class="banner error hidden"></div>
-      <div id="loading" class="loading hidden">
-        <div class="spinner"></div>
-        <p>Matching line items and validating finances…</p>
-      </div>
+    <section class="cta-band" data-reveal>
+      <span class="kicker">Analyzer</span>
+      <h2>Ready to check an invoice?</h2>
+      <p>Open the standalone analyzer app: upload an invoice and its Purchase Order, and get a verdict with every number shown.</p>
+      <a class="btn primary pill" href="/app.html">Open the analyzer</a>
     </section>
 
-    <section id="result-section" class="hidden">
-      <div class="status-banner" id="status-banner">
-        <div>
-          <div class="status-label">Status</div>
-          <div class="status-value" id="status-value">&middot;</div>
-        </div>
-        <div class="status-meta">
-          <p id="status-summary"></p>
-          <p class="action" id="status-action"></p>
-        </div>
-      </div>
-
-      <div class="result-grid">
-        <div class="card">
-          <h3>Line-item matches</h3>
-          <div id="matches-list"></div>
-        </div>
-        <div class="card">
-          <h3>Discrepancies &amp; findings</h3>
-          <div id="discrepancy-list"></div>
-        </div>
-      </div>
-
-      <details class="raw-details">
-        <summary>Raw extracted data (invoice fields, PO items, full JSON)</summary>
-        <pre class="mono" id="raw-json"></pre>
-      </details>
-    </section>
 
     <section class="section-block" id="faq">
       <div class="section-head" data-reveal>

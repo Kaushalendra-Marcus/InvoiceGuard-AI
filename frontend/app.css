@@ -1,0 +1,63 @@
+/* ======================================================================
+ * app.html: standalone analyzer page
+ * sits on top of the shared design system in style.css
+ * ==================================================================== */
+
+/* slim app bar */
+.app-header-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 22px; }
+
+/* page intro */
+.app-main { padding: 44px 0 30px; }
+.app-intro { max-width: 720px; margin: 0 auto 34px; text-align: center; }
+.app-kicker {
+  display: inline-flex; align-items: center; gap: 8px;
+  color: var(--muted); font-size: 12px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+}
+.app-kicker::before, .app-kicker::after {
+  content: ""; display: inline-block; width: 22px; height: 1.5px;
+  border-radius: 2px; background: currentColor; opacity: 0.55;
+}
+.app-intro h1 {
+  font-size: clamp(26px, 3.4vw, 38px); font-weight: 800;
+  letter-spacing: -0.03em; line-height: 1.12; margin: 10px 0 10px;
+}
+.app-intro p { color: var(--muted); font-size: 15px; max-width: 62ch; margin: 0 auto; }
+
+/* inputs */
+.app-card { border-radius: 18px; padding: 24px 26px 22px; }
+.app-card h3 { font-size: 17px; }
+.app-card .card-head p { font-size: 13.5px; margin: 2px 0 0; }
+.app-hint {
+  margin: 12px 0 0; padding-top: 12px;
+  border-top: 1px dashed var(--line);
+}
+
+/* analysis actions */
+.actions-row { display: flex; gap: 14px; align-items: center; margin: 30px 0 10px; }
+.actions-row .btn.primary { padding: 14px 30px; font-size: 15.5px; }
+.actions-row .btn.ghost { padding: 14px 24px; }
+#result-section { margin-top: 34px; }
+.result-grid { grid-template-columns: 1.02fr 0.98fr; }
+.status-banner { align-items: flex-start; }
+.status-value { font-size: 24px; }
+.action.fixed-height { min-height: 20px; }
+
+/* app-wide output polish */
+.match-item, .disc-item { transition: border-color .2s ease, background .2s ease; }
+.match-item:hover, .disc-item:hover { background: #fbfcff; }
+.raw-details { border-radius: 14px; }
+.raw-details[open] summary { color: var(--ink); }
+
+/* footer */
+.app-footer {
+  border-top: 1px solid var(--line); margin-top: 34px;
+  padding: 22px 0 30px; color: var(--muted); font-size: 13px; text-align: center;
+}
+.app-footer a { color: var(--blue); font-weight: 600; }
+
+@media (max-width: 900px) {
+  .result-grid { grid-template-columns: 1fr; }
+  .app-intro { text-align: left; }
+  .app-intro p { margin: 0; }
+}

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analyzer · InvoiceGuard AI</title>
+  <meta name="description" content="Compare a supplier invoice against its Purchase Order: semantic line matching and deterministic financial validation, running locally." />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/app.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container app-header-inner">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="InvoiceGuard AI logo" class="brand-logo" />
+        <span class="brand-name">Analyzer <em>App</em></span>
+      </a>
+      <div class="nav-right">
+        <a class="icon-circle" href="/" title="Back to the landing page" aria-label="Back to the landing page">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 22V12h6v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        </a>
+        <div class="usage-pill" id="usage-pill" title="Daily allowance for this anonymous session">
+          <svg class="usage-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="m9 12 2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span id="usage-text">10 / 10 analyses left</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container app-main">
+    <section class="app-intro" data-reveal>
+      <span class="app-kicker">Analyzer</span>
+      <h1>Check an invoice against its Purchase Order</h1>
+      <p>Invoice as a PDF or image. Purchase Order as JSON, CSV or a file upload, or load the bundled sample. Every quantity and price is recomputed locally before a verdict is shown.</p>
+    </section>
+
+    <section class="input-grid" data-reveal-stagger aria-label="Inputs">
+      <div class="card app-card" id="invoice-card">
+        <div class="card-head">
+          <span class="card-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 2v6h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 13h6M9 17h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </span>
+          <div>
+            <h3>Invoice</h3>
+            <p class="muted">PDF or image. Fields are extracted automatically.</p>
+          </div>
+        </div>
+        <label class="dropzone" id="invoice-dropzone" for="invoice-file">
+          <input type="file" id="invoice-file" accept=".pdf,.png,.jpg,.jpeg,.webp" />
+          <p id="invoice-file-name" class="dropzone-text">Choose a PDF or image, or drop it here</p>
+        </label>
+        <p class="app-hint muted small">Extraction covers invoice number, dates, currency and every line item.</p>
+      </div>
+
+      <div class="card app-card" id="po-card">
+        <div class="card-head">
+          <span class="card-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="4.5" r="1.6" fill="currentColor"/><circle cx="15" cy="4.5" r="1.6" fill="currentColor"/><circle cx="9" cy="19.5" r="1.6" fill="currentColor"/></svg>
+          </span>
+          <div>
+            <h3>Purchase Order</h3>
+            <p class="muted">Structured JSON or CSV.</p>
+          </div>
+        </div>
+        <div class="po-tabs" role="tablist">
+          <button class="tab active" data-tab="json" type="button">JSON</button>
+          <button class="tab" data-tab="csv" type="button">CSV</button>
+          <button class="tab" data-tab="file" type="button">Upload file</button>
+        </div>
+        <div class="po-file-shell hidden" id="po-file-shell">
+          <button class="btn ghost btn-sm" id="po-file-btn" type="button">Choose a .json or .csv file</button>
+          <span id="po-file-name" class="po-file-name muted small hidden"></span>
+          <input type="file" id="po-file" accept=".json,.csv" hidden />
+        </div>
+        <textarea id="po-json" class="po-editor mono" placeholder='{
+  "po_number": "PO-2024-0042",
+  "currency": "INR",
+  "items": [
+    {"description": "USB-C Cable, 1 Meter", "sku": "CBL-USB-C-1M",
+     "quantity": 100, "quantity_unit": "pcs", "unit_price": 150.00}
+  ]
+}'></textarea>
+        <textarea id="po-csv" class="po-editor mono hidden" placeholder="po_number,currency,sku,description,quantity,unit,unit_price
+PO-2024-0042,INR,CBL-USB-C-1M,USB-C Cable 1 Meter,100,pcs,150.00"></textarea>
+        <p class="app-hint muted small">SKU, description, quantity, unit and unit price are read per line item.</p>
+      </div>
+    </section>
+
+    <div class="actions-row" data-reveal>
+      <button id="btn-sample" class="btn ghost" type="button">Load sample input</button>
+      <button id="btn-analyze" class="btn primary" type="button">Analyze Invoice</button>
+    </div>
+    <p class="muted small" id="form-hint">
+      Anonymous session <code id="session-preview"></code>, 10 successful analyses per day, resets at midnight IST.
+    </p>
+
+    <div id="error-banner" class="banner error hidden"></div>
+    <div id="loading" class="loading hidden">
+      <div class="spinner"></div>
+      <p>Matching line items and validating finances…</p>
+    </div>
+
+    <section id="result-section" class="hidden">
+      <div class="status-banner" id="status-banner">
+        <div>
+          <div class="status-label">Status</div>
+          <div class="status-value" id="status-value">&middot;</div>
+        </div>
+        <div class="status-meta">
+          <p id="status-summary"></p>
+          <p class="action fixed-height" id="status-action"></p>
+        </div>
+      </div>
+
+      <div class="result-grid">
+        <div class="card app-card">
+          <h3>Line-item matches</h3>
+          <div id="matches-list"></div>
+        </div>
+        <div class="card app-card">
+          <h3>Discrepancies &amp; findings</h3>
+          <div id="discrepancy-list"></div>
+        </div>
+      </div>
+
+      <details class="raw-details">
+        <summary>Raw extracted data (invoice fields, PO items, full JSON)</summary>
+        <pre class="mono" id="raw-json"></pre>
+      </details>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <p>
+      Prototype demo: a MATCHED result is informational support for reviewers and never authorizes payment.
+      <a href="/">Landing page</a> ·
+      <a href="/docs" target="_blank" rel="noopener">API docs</a> ·
+      <a href="https://github.com/Kaushalendra-Marcus/InvoiceGuard-AI" target="_blank" rel="noopener">GitHub</a>
+    </p>
+  </footer>
+
+  <script src="/app.js"></script>
+</body>
+</html>

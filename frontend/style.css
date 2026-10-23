@@ -538,6 +538,17 @@ details.faq p { margin: 0 0 16px; color: var(--muted); font-size: 14px; animatio
   to { opacity: 1; transform: none; }
 }
 
+/* ------------------------------------------------------- landing CTA band */
+.cta-band {
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: linear-gradient(135deg, var(--tint) 0%, #ffffff 55%, var(--blue-soft) 100%);
+  box-shadow: var(--shadow);
+  padding: 42px 32px; text-align: center; margin-top: 64px;
+}
+.cta-band .kicker { display: inline-block; margin-bottom: 10px; }
+.cta-band h2 { margin: 0 0 8px; font-size: clamp(22px, 2.6vw, 30px); letter-spacing: -0.03em; }
+.cta-band p { color: var(--muted); margin: 0 auto 22px; max-width: 52ch; font-size: 15px; }
+
 /* ------------------------------------------------------- responsive additions */
 @media (max-width: 1010px) {
   .trust-strip { grid-template-columns: 1fr 1fr; }
