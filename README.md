@@ -5,8 +5,8 @@ An AI-assisted invoice ↔ Purchase Order mismatch detector that catches what na
 `Python 3.12+` · `FastAPI` · `SQLAlchemy` · `RapidFuzz` · `fastembed (BGE-small, ONNX)` · `Pydantic v2` · `Pytest`
 
 > **Status:** prototype in active development.
-> ✅ Core engine implemented (normalization, hybrid matching, deterministic financial validation, usage model).
-> 🚧 API layer, document extraction, usage limiter service, tests, frontend, and samples are being built — see [Implementation Status](#implementation-status). Nothing below is claimed as working until it appears in the ✅ column.
+> ✅ Core engine implemented: normalization, hybrid matching, deterministic financial validation, document extraction (text PDFs; OCR optional), and the usage limiter with atomic reservations.
+> 🚧 API layer, analysis/decision service, tests, frontend, and samples are being built — see [Implementation Status](#implementation-status). Nothing below is claimed as working until it appears in the ✅ column.
 
 ---
 
@@ -274,11 +274,11 @@ All examples are synthetic invoices/POs — no real vendor data in the repositor
 | Normalization (units, currency, numbers, spec extraction) | ✅ implemented |
 | Hybrid matcher (SKU / exact / fuzzy / semantic + contradiction checks) | ✅ implemented |
 | Deterministic financial validator (`Decimal`, tolerance & suppression rules) | ✅ implemented |
+| Invoice extraction — text PDFs via pypdf; scanned docs via OCR (`pytesseract` + `tesseract` + `poppler-utils`, optional) | ✅ implemented (OCR needs the optional system packages) |
+| Usage limiter service (atomic reserve/commit/release) | ✅ implemented |
 | Usage data model (unique `(session_id, date)`, reserved/committed counters) | ✅ implemented |
 | Config system (`INVOICEGUARD_*` env vars) | ✅ implemented |
 | API layer (`analyze`, `usage`, `health`) | 🚧 in progress |
-| Usage limiter service (atomic reserve/commit/release) | 🚧 in progress |
-| Invoice extraction (PDF text + OCR) | 🚧 in progress |
 | Analysis service & decision assembly | 🚧 in progress |
 | Tests | 🚧 in progress (planned cases listed above) |
 | Frontend (single page, sample loader, usage indicator) | 🚧 in progress |

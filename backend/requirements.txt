@@ -11,8 +11,15 @@ RapidFuzz==3.14.6
 fastembed==0.9.0
 numpy==2.5.4
 pillow==12.3.0
+pypdf==6.21.2
 python-multipart==0.0.32
 
 # Tests
 pytest==9.1.1
 httpx==0.28.1
+
+# Optional (OCR for scanned invoices/images):
+#   pip install pytesseract
+# plus system packages: tesseract-ocr and poppler-utils.
+# Without them the parser raises an explicit, actionable error instead of
+# inventing content; text-based PDFs work with pypdf alone.
