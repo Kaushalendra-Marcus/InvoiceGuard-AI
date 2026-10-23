@@ -1,12 +1,19 @@
-# InvoiceGuard AI
-
-An AI-assisted invoice ↔ Purchase Order mismatch detector that catches what naive string matching and naive semantic matching each miss — wrong quantities and wrong prices on lines whose *descriptions don't even look alike*.
-
-`Python 3.12+` · `FastAPI` · `SQLAlchemy` · `RapidFuzz` · `fastembed (BGE-small, ONNX)` · `Pydantic v2` · `Pytest`
-
-> **Status:** prototype in active development.
-> ✅ Core engine implemented: normalization, hybrid matching, deterministic financial validation, document extraction (text PDFs; OCR optional), and the usage limiter with atomic reservations.
-> 🚧 API layer, analysis/decision service, tests, frontend, and samples are being built — see [Implementation Status](#implementation-status). Nothing below is claimed as working until it appears in the ✅ column.
+<div align="center">
+  <img src="assets/logo.svg" alt="InvoiceGuard AI logo" width="110"/>
+  <h1>InvoiceGuard AI</h1>
+  <p><em>AI-assisted invoice ↔ Purchase Order mismatch detection: find the product across different wording, then check every quantity and price with deterministic rules — and route anything unsafe to human review.</em></p>
+  <p>
+    <code>Python 3.12+</code>&nbsp;
+    <code>FastAPI</code>&nbsp;
+    <code>SQLAlchemy</code>&nbsp;
+    <code>Pydantic v2</code>&nbsp;
+    <code>RapidFuzz</code>&nbsp;
+    <code>fastembed (BGE-small, ONNX)</code>&nbsp;
+    <code>Pytest</code>
+  </p>
+  <br/>
+  <img src="design/hero-image.png" alt="InvoiceGuard AI comparing an invoice line against its purchase order line and flagging a quantity mismatch (120 invoiced vs 100 ordered)" width="720"/>
+</div>
 
 ---
 
@@ -109,11 +116,11 @@ backend/app/
 ├── normalizer.py         # Stage 1: text/number/currency/unit normalization, spec extraction
 ├── matching.py           # Stages 2–4: SKU/exact/fuzzy/semantic matcher + contradiction checks
 ├── financial_validator.py# Stage 5: deterministic Decimal validation & discrepancy generation
-├── analysis_service.py   # Stage 6: decision assembly & report (in progress)
-├── usage_limiter.py      # Anonymous daily limit with atomic reservation (in progress)
-├── document_parser.py    # PDF text parser + OCR for scans (in progress)
-├── api.py                # FastAPI routes (in progress)
-└── main.py               # App entrypoint (in progress)
+├── analysis_service.py   # Stage 6: decision assembly & report
+├── usage_limiter.py      # Anonymous daily limit with atomic reservation
+├── document_parser.py    # PDF text parser + OCR for scans
+├── api.py                # FastAPI routes
+└── main.py               # App entrypoint
 ```
 
 Design notes:
@@ -171,6 +178,8 @@ Illustrative response for the worked example:
 }
 ```
 
+*Sample output for illustration; a live run's similarity score depends on the loaded embedding model.*
+
 ### `GET /api/v1/usage`
 
 ```bash
@@ -197,7 +206,7 @@ Where the enforcement lives and why:
   - failure ⇒ the reservation is released. Rejects, invalid uploads, extraction errors, and infrastructure failures **do not consume the allowance**.
 - **Concurrency-safe.** WAL mode plus the reserve-then-commit pattern means parallel requests cannot exceed 10 even when they arrive simultaneously; the 11th successful validation gets `429 Too Many Requests`.
 - **Leak protection.** Reservations older than a TTL (default 15 min) are reclaimed so a crashed request cannot permanently eat capacity.
-- **Honest limitation.** Anonymous browser sessions are not real identity — clearing storage gets a fresh allowance. The mechanism exists to demonstrate correct backend rate limiting (atomicity, uniqueness, day rollover), not enterprise-grade abuse prevention. The UI states remainingAllowance like `Daily analyses remaining: 7 / 10`, and disables with "resets at midnight IST" at zero.
+- **Honest limitation.** Anonymous browser sessions are not real identity — clearing storage gets a fresh allowance. The mechanism exists to demonstrate correct backend rate limiting (atomicity, uniqueness, day rollover), not enterprise-grade abuse prevention. The UI shows `Daily analyses remaining: 7 / 10`, and disables the action with a "resets at midnight IST" message when the allowance is exhausted.
 
 ---
 
@@ -210,7 +219,7 @@ Where the enforcement lives and why:
 | Fuzzy matching | RapidFuzz | Fast, dependency-light token similarity |
 | Semantic matching | fastembed (`BAAI/bge-small-en-v1.5`, ONNX) | Local sentence embeddings without torch or external APIs |
 | Money math | Python `Decimal` (`ROUND_HALF_UP`) | Exact currency arithmetic; no float drift |
-| Documents | PDF parser + Tesseract-family OCR for scans | Text PDFs parsed directly; images OCR'd |
+| Documents | `pypdf` for text PDFs; OCR (`pytesseract` + `tesseract-ocr` + `poppler-utils`) for scans | Text PDFs parsed directly; images OCR'd; the parser fails explicitly when OCR tooling is absent instead of inventing content |
 | Tests | Pytest (+ its async/client plugin) | Small, meaningful suite (below) |
 
 ## Configuration
@@ -266,25 +275,6 @@ The suite targets the spec's fourteen core cases — matching and money first:
 - **API:** document validation, sample end-to-end
 
 All examples are synthetic invoices/POs — no real vendor data in the repository.
-
-## Implementation status
-
-| Area | State |
-|---|---|
-| Normalization (units, currency, numbers, spec extraction) | ✅ implemented |
-| Hybrid matcher (SKU / exact / fuzzy / semantic + contradiction checks) | ✅ implemented |
-| Deterministic financial validator (`Decimal`, tolerance & suppression rules) | ✅ implemented |
-| Invoice extraction — text PDFs via pypdf; scanned docs via OCR (`pytesseract` + `tesseract` + `poppler-utils`, optional) | ✅ implemented (OCR needs the optional system packages) |
-| Usage limiter service (atomic reserve/commit/release) | ✅ implemented |
-| Usage data model (unique `(session_id, date)`, reserved/committed counters) | ✅ implemented |
-| Config system (`INVOICEGUARD_*` env vars) | ✅ implemented |
-| API layer (`analyze`, `usage`, `health`) | 🚧 in progress |
-| Analysis service & decision assembly | 🚧 in progress |
-| Tests | 🚧 in progress (planned cases listed above) |
-| Frontend (single page, sample loader, usage indicator) | 🚧 in progress |
-| Sample invoice & PO for instant demo | 🚧 in progress |
-
-*Benchmarks are not published; the "score" shown in examples is illustrative, not a measured result.*
 
 ## Known limitations
 

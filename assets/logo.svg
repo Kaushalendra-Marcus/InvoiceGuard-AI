@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="InvoiceGuard AI">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0B1B33"/>
+      <stop offset="100%" stop-color="#123C6B"/>
+    </linearGradient>
+    <linearGradient id="shield" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#25D0A0"/>
+      <stop offset="100%" stop-color="#0E9F77"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="16" y="16" width="480" height="480" rx="96" fill="url(#bg)"/>
+
+  <!-- Invoice document -->
+  <rect x="176" y="104" width="160" height="248" rx="14" fill="#FFFFFF"/>
+  <rect x="196" y="130" width="88" height="14" rx="7" fill="#94A3B8"/>
+  <path d="M196 176 H276" stroke="#CBD5E1" stroke-width="8" stroke-linecap="round"/>
+  <path d="M196 204 H300" stroke="#CBD5E1" stroke-width="8" stroke-linecap="round"/>
+  <path d="M196 232 H264" stroke="#CBD5E1" stroke-width="8" stroke-linecap="round"/>
+  <path d="M196 256 H316" stroke="#E2E8F0" stroke-width="6"/>
+  <path d="M196 288 H240" stroke="#CBD5E1" stroke-width="8" stroke-linecap="round"/>
+  <path d="M196 316 H272" stroke="#CBD5E1" stroke-width="8" stroke-linecap="round"/>
+
+  <!-- Discrepancy flag -->
+  <circle cx="336" cy="112" r="26" fill="#F59E0B" stroke="#0B1B33" stroke-width="8"/>
+  <rect x="332" y="97" width="9" height="19" rx="4.5" fill="#FFFFFF"/>
+  <circle cx="336.5" cy="125" r="4.75" fill="#FFFFFF"/>
+
+  <!-- Validation shield -->
+  <path d="M256 350 l64 26 v42 c0 31 -27 54 -64 68 c-37 -14 -64 -37 -64 -68 v-42 z" fill="url(#shield)"/>
+  <path d="M228 424 l20 20 l42 -46" fill="none" stroke="#FFFFFF" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
