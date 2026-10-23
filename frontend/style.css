@@ -54,9 +54,9 @@ h1, h2, h3, h4 { font-weight: 800; }
 /* pill nav chips, reference nav grammar */
 .nav-chips { display: flex; gap: 8px; margin: 0 auto; }
 .nav-chips a {
-  padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line);
+  padding: 8px 17px; border-radius: 999px; border: 1px solid var(--line);
   background: #fff; color: var(--muted); text-decoration: none;
-  font-size: 13px; font-weight: 600; white-space: nowrap;
+  font-size: 13.5px; font-weight: 600; white-space: nowrap;
   transition: border-color .15s, color .15s, background .15s;
 }
 .nav-chips a:hover { border-color: var(--blue); color: var(--blue-dark); background: var(--blue-soft); }
@@ -81,10 +81,10 @@ h1, h2, h3, h4 { font-weight: 800; }
 .usage-pill.exhausted { background: var(--danger); }
 
 /* ------------------------------------------------------------------ hero */
-.hero { display: grid; grid-template-columns: 1fr 1fr; gap: 46px; align-items: center; padding: 64px 0 30px; }
+.hero { display: grid; grid-template-columns: 0.96fr 1.04fr; gap: 46px; align-items: center; padding: 64px 0 30px; }
 .hero h1 {
-  font-size: clamp(36px, 4.8vw, 56px); font-weight: 800;
-  line-height: 1.06; letter-spacing: -0.035em; margin: 18px 0 18px;
+  font-size: clamp(33px, 3.8vw, 46px); font-weight: 800;
+  line-height: 1.08; letter-spacing: -0.032em; margin: 18px 0 18px;
 }
 .hero p { color: var(--muted); margin: 0 0 20px; font-size: 14.5px; max-width: 52ch; }
 .hero-badge {
