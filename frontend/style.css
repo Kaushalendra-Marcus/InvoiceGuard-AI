@@ -81,12 +81,12 @@ h1, h2, h3, h4 { font-weight: 800; }
 .usage-pill.exhausted { background: var(--danger); }
 
 /* ------------------------------------------------------------------ hero */
-.hero { display: grid; grid-template-columns: 0.94fr 1.06fr; gap: 46px; align-items: center; padding: 64px 0 30px; }
+.hero { display: grid; grid-template-columns: 0.92fr 1.08fr; gap: 46px; align-items: center; padding: 64px 0 30px; }
 .hero h1 {
-  font-size: clamp(33px, 3.8vw, 46px); font-weight: 800;
+  font-size: clamp(33px, 4.6vw, 56px); font-weight: 800;
   line-height: 1.08; letter-spacing: -0.032em; margin: 18px 0 18px;
 }
-.hero p { color: var(--muted); margin: 0 0 20px; font-size: 14.5px; max-width: 52ch; }
+.hero p { color: var(--muted); margin: 0 0 20px; font-size: 15px; max-width: 52ch; }
 .hero-badge {
   display: inline-flex; align-items: center; gap: 10px;
   color: var(--muted); font-size: 14px; font-weight: 600;
