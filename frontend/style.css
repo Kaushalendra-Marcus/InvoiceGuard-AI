@@ -81,7 +81,7 @@ h1, h2, h3, h4 { font-weight: 800; }
 .usage-pill.exhausted { background: var(--danger); }
 
 /* ------------------------------------------------------------------ hero */
-.hero { display: grid; grid-template-columns: 0.96fr 1.04fr; gap: 46px; align-items: center; padding: 64px 0 30px; }
+.hero { display: grid; grid-template-columns: 0.94fr 1.06fr; gap: 46px; align-items: center; padding: 64px 0 30px; }
 .hero h1 {
   font-size: clamp(33px, 3.8vw, 46px); font-weight: 800;
   line-height: 1.08; letter-spacing: -0.032em; margin: 18px 0 18px;
