@@ -409,12 +409,12 @@ section[id] { scroll-margin-top: 84px; }
 }
 
 /* ============================================== dark scene footer
- * full-bleed illustration on top of a dark body; the foreground hill color
- * matches the footer background so the scene and the body read as one. */
-.site-footer { margin-top: 70px; background: #0e504a; color: #fff; }
+ * full-bleed illustration on top of a dark body; the footer background
+ * (#02454f) matches the illustration's bottom band so they read as one. */
+.site-footer { margin-top: 70px; background: #02454f; color: #fff; }
 .footer-scene { line-height: 0; }
-.footer-scene svg { display: block; width: 100%; height: auto; }
-.footer-content { padding: 0 0 40px; }
+.footer-scene img { display: block; width: 100%; height: auto; }
+.footer-content { position: relative; margin-top: -6vw; padding: 0 0 40px; }
 
 .footer-headline {
   font-size: clamp(30px, 3.6vw, 46px); font-weight: 800; line-height: 1.1;
