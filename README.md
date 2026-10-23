@@ -120,7 +120,16 @@ backend/app/
 ├── usage_limiter.py      # Anonymous daily limit with atomic reservation
 ├── document_parser.py    # PDF text parser + OCR for scans
 ├── api.py                # FastAPI routes
-└── main.py               # App entrypoint
+└── main.py               # App entrypoint (exports the UI in full-stack mode)
+
+frontend/                 # Vanilla HTML/CSS/JS single page (no build step)
+├── index.html            # Landing + workbench; anchors into the sections below
+├── style.css             # Design system following the mockups in design/
+├── app.js                # Session id, usage pill, analyze flow, report rendering
+└── assets/               # Logo, hero illustration, bundled sample invoice
+
+samples/                  # Demo data for the worked example (regenerate via scripts/make_samples.py)
+scripts/                  # Utility scripts
 ```
 
 Design notes:
@@ -142,7 +151,7 @@ Multipart form: the invoice file (`pdf`, `png`, `jpg`, `jpeg`, `webp` — max 10
 curl -X POST http://localhost:8000/api/v1/analyze \
   -H "X-Session-ID: anon-9f2a7c4e1" \
   -F "invoice=@samples/invoice_sample.pdf" \
-  -F "po_file=@samples/po_sample.json"
+  -F "purchase_order_file=@samples/po_sample.json"
 ```
 
 Illustrative response for the worked example:
@@ -220,6 +229,7 @@ Where the enforcement lives and why:
 | Semantic matching | fastembed (`BAAI/bge-small-en-v1.5`, ONNX) | Local sentence embeddings without torch or external APIs |
 | Money math | Python `Decimal` (`ROUND_HALF_UP`) | Exact currency arithmetic; no float drift |
 | Documents | `pypdf` for text PDFs; OCR (`pytesseract` + `tesseract-ocr` + `poppler-utils`) for scans | Text PDFs parsed directly; images OCR'd; the parser fails explicitly when OCR tooling is absent instead of inventing content |
+| Frontend | Vanilla HTML/CSS/JS, no build step | One page served by the backend at `/`; anonymous session id in localStorage; zero npm dependencies |
 | Tests | Pytest (+ its async/client plugin) | Small, meaningful suite (below) |
 
 ## Configuration
@@ -257,7 +267,10 @@ pip install -r backend/requirements.txt
 uvicorn backend.app.main:app --reload        # → http://localhost:8000
 ```
 
-Load the bundled sample invoice + PO from `samples/`, press **Analyze Invoice**, and you get the worked example above without preparing any data.
+uvicorn backend.app.main:app --reload        # API + UI → http://localhost:8000
+```
+
+Open `http://localhost:8000`, press **Load sample input**, then **Analyze Invoice** — the worked example above runs without preparing any data.</think><tool_call>edit<arg_key>newString</arg_key><arg_value>Open `http://localhost:8000`, press **Load sample input**, then **Analyze Invoice** — the worked example runs without preparing any data.
 
 Run the tests:
 

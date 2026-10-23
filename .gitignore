@@ -39,3 +39,6 @@ build/
 
 # Vite cache (unused detour)
 frontend/.vite/
+
+# Local design references (mockups, not repository content)
+design/Pasted image*.png
