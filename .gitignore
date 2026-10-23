@@ -17,6 +17,9 @@ data/
 *.db-wal
 *.db-shm
 
+# Prefetched fastembed model cache (built on the deployment image)
+model_cache/
+
 # IDE
 .vscode/
 .idea/

@@ -1,0 +1,18 @@
+# Render blueprint for InvoiceGuard AI.
+# Deploy with the Render Blueprint workflow (New + -> Blueprint) or let the
+# dashboard create the service; this file documents the same configuration.
+services:
+  - type: web
+    name: invoiceguard-ai
+    runtime: python
+    plan: free
+    autoDeploy: true
+    buildCommand: pip install -r backend/requirements.txt && python scripts/prefetch_model.py
+    # backend.app.main:app -> repo-root working dir; PORT is injected by Render
+    startCommand: uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: INVOICEGUARD_EMBEDDING_CACHE
+        value: model_cache
+      - key: PYTHON_VERSION
+        value: "3.13"

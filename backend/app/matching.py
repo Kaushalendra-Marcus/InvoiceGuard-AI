@@ -52,9 +52,13 @@ class SemanticMatcher:
     report declares the semantic stage unavailable instead of pretending.
     """
 
-    def __init__(self, model_name: Optional[str] = None, enabled: bool = True):
+    def __init__(self, model_name: Optional[str] = None, enabled: bool = True,
+                 cache_dir: Optional[str] = None):
         self.model_name = model_name or settings.embedding_model
         self.enabled = enabled
+        # Explicit cache dir: lets deployments prefetch the (large) ONNX model
+        # at image-build time and point runtime loads at the baked-in copy.
+        self.cache_dir = cache_dir or settings.embedding_cache or None
         self.unavailable_reason: Optional[str] = None
         self._model = None
         self._load_attempted = False
@@ -76,7 +80,7 @@ class SemanticMatcher:
         try:
             from fastembed import TextEmbedding  # imported lazily: heavy optional dep
 
-            self._model = TextEmbedding(model_name=self.model_name)
+            self._model = TextEmbedding(model_name=self.model_name, cache_dir=self.cache_dir)
         except Exception as exc:  # pragma: no cover - depends on runtime env
             self._model = None
             self.unavailable_reason = f"semantic model unavailable ({type(exc).__name__})"

@@ -40,6 +40,9 @@ class Settings(BaseSettings):
     semantic_threshold: float = 0.72         # cosine similarity 0..1
     ambiguous_score_gap: float = 0.05        # top-2 candidates within this gap -> ambiguous
     embedding_model: str = "BAAI/bge-small-en-v1.5"
+    # Optional ONNX model cache directory: in container deployments this is
+    # prefetched during the image build so every cold start is instant.
+    embedding_cache: str | None = None
 
     # --- Financial tolerances ------------------------------------------
     # Price differences within this percentage (or the absolute floor below)
