@@ -33,12 +33,12 @@ class Tolerances:
     shortfall_as_discrepancy: bool = False
 
     def price_ok(self, difference: Decimal, base_price: Decimal) -> bool:
-        allowance = max(base_price.abs() * self.price_tolerance_pct, self.absolute_price_tolerance)
-        return difference.abs() <= allowance
+        allowance = max(base_price.copy_abs() * self.price_tolerance_pct, self.absolute_price_tolerance)
+        return difference.copy_abs() <= allowance
 
     def line_total_ok(self, difference: Decimal, base_total: Decimal) -> bool:
-        allowance = max(base_total.abs() * self.price_tolerance_pct, Decimal("0.05"))
-        return difference.abs() <= allowance
+        allowance = max(base_total.copy_abs() * self.price_tolerance_pct, Decimal("0.05"))
+        return difference.copy_abs() <= allowance
 
 
 @dataclass
@@ -111,7 +111,7 @@ def compare_pair(
         remaining = max(Decimal("0"), po_qty - previously_invoiced_qty)
         qty_diff = inv_qty - remaining
         result.quantity_difference = qty_diff
-        result.quantity_ok = qty_diff.abs() <= tolerances.quantity_tolerance
+        result.quantity_ok = qty_diff.copy_abs() <= tolerances.quantity_tolerance
         if not result.quantity_ok:
             if qty_diff > 0:
                 excess: Decimal | None = qty_diff * po_price
@@ -267,7 +267,7 @@ def validate_po_line_internal_consistency(po_item: POItemOut, currency: str | No
     computed = po_item.quantity * po_item.unit_price
     diff = po_item.line_total - computed
     if q2(diff) == Decimal("0") or abs(diff) <= max(
-        po_item.line_total.abs() * Decimal("0.005"), Decimal("0.05")
+        po_item.line_total.copy_abs() * Decimal("0.005"), Decimal("0.05")
     ):
         return None
     return Discrepancy(
@@ -304,8 +304,8 @@ def validate_invoice_totals(
 
     if subtotal is not None and line_sum > 0:
         diff = subtotal - line_sum
-        allowance = max(subtotal.abs() * Decimal("0.001"), Decimal("0.05"))
-        if diff.abs() > allowance:
+        allowance = max(subtotal.copy_abs() * Decimal("0.001"), Decimal("0.05"))
+        if diff.copy_abs() > allowance:
             findings.append(
                 Discrepancy(
                     type=DiscrepancyType.INVOICE_TOTAL_MISMATCH,

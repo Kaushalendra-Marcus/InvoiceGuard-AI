@@ -9,6 +9,13 @@ env/
 # Environment variables
 .env
 .env.*
+!.env.example
+
+# Runtime data
+data/
+*.db
+*.db-wal
+*.db-shm
 
 # IDE
 .vscode/
@@ -25,3 +32,10 @@ node_modules/
 dist/
 build/
 *.log
+
+# Test caches
+.pytest_cache/
+.ruff_cache/
+
+# Vite cache (unused detour)
+frontend/.vite/

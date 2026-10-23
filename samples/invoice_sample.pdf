@@ -1,0 +1,71 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 5 0 R /F2 6 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 1603 >>
+stream
+BT /F2 17 Tf 72 790 Td (INVOICE) Tj ET
+BT /F2 10 Tf 72 764 Td (MarcusTech Supplies Pvt. Ltd.) Tj ET
+BT /F1 9 Tf 72 748 Td (101 Tech Park, Baner Road, Pune 411045) Tj ET
+BT /F1 10 Tf 72 720 Td (Invoice No: INV-2026-1187) Tj ET
+BT /F1 10 Tf 72 704 Td (Invoice Date: 24 October 2026) Tj ET
+BT /F1 10 Tf 72 688 Td (PO No: PO-2024-0042) Tj ET
+BT /F1 10 Tf 72 672 Td (Bill To: Insight Retail LLP, Pune) Tj ET
+BT /F2 9 Tf 72 632 Td (Item) Tj ET
+BT /F2 9 Tf 330 632 Td (Qty) Tj ET
+BT /F2 9 Tf 382 632 Td (Unit) Tj ET
+BT /F2 9 Tf 430 632 Td (Unit Price \(INR\)) Tj ET
+BT /F2 9 Tf 500 632 Td (Line Total \(INR\)) Tj ET
+0.6 w 72 626 m 523 626 l S
+BT /F1 9 Tf 72 604 Td (Type-C Charging Cable, 100cm) Tj ET
+BT /F1 9 Tf 338 604 Td (120) Tj ET
+BT /F1 9 Tf 382 604 Td (pcs) Tj ET
+BT /F1 9 Tf 430 604 Td (150.00) Tj ET
+BT /F1 9 Tf 500 604 Td (18,000.00) Tj ET
+BT /F1 9 Tf 72 584 Td (Laptop Stand) Tj ET
+BT /F1 9 Tf 338 584 Td (50) Tj ET
+BT /F1 9 Tf 382 584 Td (pcs) Tj ET
+BT /F1 9 Tf 430 584 Td (800.00) Tj ET
+BT /F1 9 Tf 500 584 Td (40,000.00) Tj ET
+BT /F1 9 Tf 72 564 Td (HDMI Adapter) Tj ET
+BT /F1 9 Tf 338 564 Td (10) Tj ET
+BT /F1 9 Tf 382 564 Td (pcs) Tj ET
+BT /F1 9 Tf 430 564 Td (450.00) Tj ET
+BT /F1 9 Tf 500 564 Td (4,500.00) Tj ET
+0.6 w 72 544 m 523 544 l S
+BT /F1 9 Tf 430 520 Td (Subtotal:) Tj ET
+BT /F1 9 Tf 500 520 Td (INR 62,500.00) Tj ET
+BT /F1 9 Tf 430 502 Td (Tax: as applicable) Tj ET
+BT /F2 10 Tf 430 478 Td (Total:) Tj ET
+BT /F2 10 Tf 500 478 Td (INR 62,500.00) Tj ET
+BT /F1 9 Tf 72 430 Td (Note: goods once sold are non-returnable.) Tj ET
+BT /F1 9 Tf 72 414 Td (Thank you for your business.) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+6 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000251 00000 n 
+0000001906 00000 n 
+0000001976 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R >>
+startxref
+2051
+%%EOF

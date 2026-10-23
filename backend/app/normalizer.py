@@ -238,7 +238,7 @@ def parse_decimal(raw: str | float | int | Decimal | None) -> Decimal | None:
     if not text or text in {"-", ".", "-."}:
         return None
 
-    stripped = _CURRENCY_RE.sub(" ", text)
+    stripped = CURRENCY_RE.sub(" ", text)
     if "," in stripped:
         head, _, tail = stripped.rpartition(",")
         groups = head.split(",")
@@ -291,7 +291,8 @@ def format_money(value: Decimal, currency: str | None = None) -> str:
 # Spec extraction (for contradiction checks between matched descriptions)
 # ---------------------------------------------------------------------------
 _LENGTH_SPEC_RE = re.compile(
-    r"\b(\d+(?:\.\d+)?)\s*(mm|cm|m|km|in(?:ch(?:es)?)?|ft|feet|foot|yds?|yards?)\b\.?", re.IGNORECASE
+    r"\b(\d+(?:\.\d+)?)\s*(mm|cm|km|meters?|metres?|m|inches|inch|in|feet|foot|ft|yards?|yd|"
+    r"millimeters?|millimetres?|centimeters?|centimetres?)\b\.?", re.IGNORECASE
 )
 _WEIGHT_SPEC_RE = re.compile(r"\b(\d+(?:\.\d+)?)\s*(mg|g|gm|gms|kg|kgs|kilograms?)\b\.?", re.IGNORECASE)
 

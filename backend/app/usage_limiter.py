@@ -177,6 +177,9 @@ class UsageLimiter:
             if row is None:
                 return None
             reserved_day = row[0]
+            if isinstance(reserved_day, str):
+                # SQLite RETURNING yields the raw ISO text for date columns
+                reserved_day = date.fromisoformat(reserved_day)
         return reserved_day
 
     def commit(self, session_id: str, usage_date: date) -> None:

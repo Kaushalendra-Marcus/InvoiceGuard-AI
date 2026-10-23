@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="assets/logo.svg" alt="InvoiceGuard AI logo" width="110"/>
+  <img src="assets/logo.png" alt="InvoiceGuard AI logo" width="110"/>
   <h1>InvoiceGuard AI</h1>
   <p><em>AI-assisted invoice ↔ Purchase Order mismatch detection: find the product across different wording, then check every quantity and price with deterministic rules — and route anything unsafe to human review.</em></p>
   <p>

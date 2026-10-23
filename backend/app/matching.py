@@ -33,9 +33,12 @@ from .normalizer import (
 from .schemas import ConfidenceCategory, InvoiceItemOut, MatchMethod, POItemOut
 
 # Relative similarity below which a SKU-anchored pair counts as "unrelated
-# descriptions" (SKU matches, descriptions contradict each other).
-_SKU_DESC_DIVERGENCE_FUZZY = 25.0
-_SKU_DESC_DIVERGENCE_SEMANTIC = 0.45
+# descriptions" (SKU matches, descriptions contradict each other). bge-small
+# cosines run high even for related-but-different products (~0.64), while
+# true rewordings score >= ~0.8, so the semantic fallback threshold is a
+# 'close-to-identical' bar with fuzzy(rapidfuzz) doing the discriminating.
+_SKU_DESC_DIVERGENCE_FUZZY = 40.0
+_SKU_DESC_DIVERGENCE_SEMANTIC = 0.70
 
 
 # ---------------------------------------------------------------------------
@@ -105,7 +108,9 @@ class SemanticMatcher:
         nb = math.sqrt(sum(y * y for y in b))
         if na == 0.0 or nb == 0.0:
             return 0.0
-        return dot / (na * nb)
+        # Guard against float overshoot just past 1.0, which the report
+        # schema (semantic_score <= 1) would reject with a 500.
+        return max(-1.0, min(1.0, dot / (na * nb)))
 
 
 _module_matcher: Optional[SemanticMatcher] = None
@@ -280,7 +285,9 @@ def match_invoice_to_po(
 
         candidates.sort(key=lambda c: (_KIND_RANK[c.kind], c.score), reverse=True)
         top = candidates[0]
-        second = candidates[1] if len(candidates) > 1 else None
+        # Ambiguity must compare *distinct PO lines* (else the same line's
+        # fuzzy + semantic candidates could falsely read as a tie).
+        second = next((c for c in candidates if c.po_index != top.po_index), None)
 
         # Ambiguity: description-only evidence with a near-tie runner-up, or
         # two different PO lines claiming the same SKU without an exact

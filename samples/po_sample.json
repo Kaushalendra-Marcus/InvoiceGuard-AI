@@ -1,0 +1,27 @@
+{
+  "po_number": "PO-2024-0042",
+  "currency": "INR",
+  "items": [
+    {
+      "description": "USB-C Cable, 1 Meter",
+      "sku": "CBL-USB-C-1M",
+      "quantity": 100,
+      "quantity_unit": "pcs",
+      "unit_price": 150.00
+    },
+    {
+      "description": "Laptop Stand",
+      "sku": "STD-LAP-001",
+      "quantity": 50,
+      "quantity_unit": "pcs",
+      "unit_price": 800.00
+    },
+    {
+      "description": "HDMI Adapter",
+      "sku": "HDMI-ADP-001",
+      "quantity": 10,
+      "quantity_unit": "pcs",
+      "unit_price": 450.00
+    }
+  ]
+}

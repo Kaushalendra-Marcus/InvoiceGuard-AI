@@ -233,8 +233,13 @@ def _decimals_of(value: Decimal) -> int:
     return max(0, -tup.exponent) if isinstance(tup.exponent, int) else 0
 
 
-def _assign_triple(numbers: list[tuple[int, Decimal]], notes: list[str]) -> tuple[Decimal, str | None, Decimal, Decimal] | None:
-    """Choose (qty, unit, unit_price, line_total) from ordered numeric tokens."""
+def _assign_triple(numbers: list[tuple[int, Decimal]], notes: list[str]) -> tuple[Decimal, str | None, Decimal, Decimal, int] | None:
+    """Choose (qty, unit, unit_price, line_total, description_start_token_idx).
+
+    The description boundary is the first token of the *winning* numeric
+    group, so numbers that belong to the product name (e.g. '1 Meter',
+    '30W') stay part of the description.
+    """
     import itertools
 
     n = len(numbers)
@@ -245,7 +250,8 @@ def _assign_triple(numbers: list[tuple[int, Decimal]], notes: list[str]) -> tupl
         for a, b, c in ((v_q, v_p, v_t), (v_p, v_q, v_t)):
             if _fits_product(a, b, c):
                 qty, price = _orient_qty_price(a, b, i_tok, j_tok, notes)
-                return qty, None, price, c
+                start = min(i_tok, j_tok, k_tok)
+                return qty, None, price, c, start
 
     # No confident (qty x price = total) fit: fall back to formatting
     # heuristics on the first and last numbers. Missing leg stays None.
@@ -257,19 +263,18 @@ def _assign_triple(numbers: list[tuple[int, Decimal]], notes: list[str]) -> tupl
             "Line layout interpreted as quantity followed by a monetary value; "
             "unit price not stated separately on this line."
         )
-        return a, None, None, b
+        return a, None, None, b, numbers[0][0]
     if a_dec == 0 and b_dec == 0 and n >= 2:
-        # [quantity, ordered-quantity?] ambiguous: report quantity of the last
-        # integer and leave money fields empty rather than guessing.
-        notes.append("Two numbers without decimal formatting could not be classified.")
-        return numbers[-1][1], None, None, None
+        # Two integers without a total (e.g. '21 Oct 2026'): unclassifiable,
+        # so the line is not treated as an invoice item at all.
+        return None
     if a_dec <= 2 and b_dec >= 2 and b > a:
         # [unit price, line total]
         notes.append(
             "Column order inferred from value formatting: first number interpreted "
             "as unit price, second as line total; quantity not stated on this line."
         )
-        return None, None, a, b
+        return None, None, a, b, numbers[0][0]
     return None
 
 
@@ -314,10 +319,15 @@ def _classify_line(line: str) -> RawLineItem | None:
     if len(numbers) < 2:
         return None
 
-    first_numeric_idx = numbers[0][0]
-    description = " ".join(tokens[:first_numeric_idx]).strip(" ,:;-")
+    description = ""
     notes: list[str] = []
     assigned = _assign_triple(numbers, notes)
+    if assigned is not None:
+        qty, unit, price, total, start_idx = assigned
+        description = " ".join(tokens[:start_idx]).strip(" ,:;-")
+    else:
+        first_numeric_idx = numbers[0][0]
+        description = " ".join(tokens[:first_numeric_idx]).strip(" ,:;-")
     if not description or len(description) < 2:
         # A line whose description is empty is likely a totals row fragment.
         return None
@@ -326,7 +336,7 @@ def _classify_line(line: str) -> RawLineItem | None:
     if qty_unit is not None:
         item.quantity_unit = qty_unit.lower()
     if assigned is not None:
-        qty, unit, price, total = assigned
+        qty, unit, price, total, _ = assigned
         item.quantity = qty
         item.unit_price = price
         item.line_total = total
@@ -340,9 +350,10 @@ def _classify_line(line: str) -> RawLineItem | None:
                     "Stated values on this line are internally inconsistent "
                     "(quantity x unit price differs from the line total)."
                 )
-    else:
-        item.notes.append("Numeric values on this line could not be reliably classified.")
-    item.currency = currency_hint  # attached by caller if provided
+    if item.quantity is None and item.unit_price is None and item.line_total is None:
+        # Nothing could be classified: not a usable line item (e.g. metadata
+        # rows that happen to contain numbers). Never fabricate one.
+        return None
     return item
 
 
