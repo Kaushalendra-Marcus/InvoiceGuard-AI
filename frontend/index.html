@@ -20,13 +20,17 @@
         <a href="#features">Features</a>
         <a href="#how">How it works</a>
         <a href="#checks">What it checks</a>
+        <a href="#faq">FAQ</a>
       </nav>
-      <div class="usage-pill" id="usage-pill" title="Daily allowance for this anonymous session">
-        <svg class="usage-icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-          <path d="m9 12 2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <span id="usage-text">Daily analyses remaining: – / 10</span>
+      <div class="header-right">
+        <div class="usage-pill" id="usage-pill" title="Daily allowance for this anonymous session">
+          <svg class="usage-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="m9 12 2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span id="usage-text">Daily analyses remaining: – / 10</span>
+        </div>
+        <a class="btn primary pill header-cta" href="#workbench">Analyze an invoice</a>
       </div>
     </div>
   </header>
@@ -174,6 +178,46 @@
       </div>
     </section>
 
+    <section class="section-block" id="faq">
+      <div class="section-head">
+        <span class="kicker">FAQ</span>
+        <h2>Straight answers</h2>
+        <p>How the tool works and what happens to your data — the short versions.</p>
+      </div>
+      <div class="faq-list">
+        <details class="faq">
+          <summary>What happens to my documents?</summary>
+          <p class="muted">The invoice and Purchase Order are processed in memory only — extraction, matching and validation produce the report, and nothing about the documents is written to disk. The only stored state is the anonymous daily allowance counter row for your session.</p>
+        </details>
+        <details class="faq">
+          <summary>Is any data sent to an external AI service?</summary>
+          <p class="muted">No. Semantic matching runs on a local ONNX embedding model (bge-small via fastembed). There is no external API key, no per-request cost, and no data leaves the machine.</p>
+        </details>
+        <details class="faq">
+          <summary>Why does a suspicious invoice get NEEDS_REVIEW instead of REJECTED?</summary>
+          <p class="muted">When the evidence is insufficient (ambiguous candidates, contradictory SKUs or units, missing values), claiming a hard verdict would be guessing. The tool names exactly what is unclear and leaves the decision to a finance reviewer.</p>
+        </details>
+        <details class="faq">
+          <summary>Which files are supported?</summary>
+          <p class="muted">Invoices: PDF, PNG, JPG/JPEG, WEBP (up to 10 MB). Purchase Orders: JSON or CSV files, or pasted/text-edited JSON directly in the workbench.</p>
+        </details>
+        <details class="faq">
+          <summary>What does the 10-per-day limit actually mean?</summary>
+          <p class="muted">Each browser session gets 10 successful analyses per calendar day (Asia/Kolkata, reset at midnight IST). Failed analyses and rejected uploads never consume the allowance. Clearing browser storage starts a session with a fresh counter.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="cta-band">
+      <div class="container cta-inner">
+        <div class="cta-copy">
+          <h2>Ready to stop paying wrong invoices?</h2>
+          <p>Load the bundled sample or your own documents — anonymous, local and free while the prototype runs.</p>
+        </div>
+        <a class="btn primary pill btn-lg" href="#workbench">Analyze an invoice</a>
+      </div>
+    </section>
+
     <section class="workbench" id="workbench">
       <h2>Analyze an invoice against its Purchase Order</h2>
       <div class="input-grid">
@@ -270,12 +314,42 @@ PO-2024-0042,INR,CBL-USB-C-1M,USB-C Cable 1 Meter,100,pcs,150.00"></textarea>
     </section>
 
     <footer class="site-footer">
-      <p>
-        InvoiceGuard AI is a focused prototype — a MATCHED result is informational support for
-        reviewers and <strong>never authorizes payment</strong>.
-        <a href="/docs" target="_blank" rel="noopener">API docs</a> ·
-        <a href="https://github.com/Kaushalendra-Marcus/InvoiceGuard-AI" target="_blank" rel="noopener">GitHub</a>
-      </p>
+      <div class="container footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="/">
+            <img src="/assets/logo.png" alt="InvoiceGuard AI logo" class="brand-logo" />
+            <span class="brand-name">InvoiceGuard <em>AI</em></span>
+          </a>
+          <p class="muted">
+            Catch invoice&#8211;PO mismatches before payment: semantic line matching plus
+            deterministic decimal validation, running fully local.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="#features">Features</a>
+          <a href="#how">How it works</a>
+          <a href="#checks">What it checks</a>
+          <a href="#faq">FAQ</a>
+          <a href="#workbench">Workbench</a>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <a href="/docs" target="_blank" rel="noopener">API docs</a>
+          <a href="https://github.com/Kaushalendra-Marcus/InvoiceGuard-AI" target="_blank" rel="noopener">GitHub repository</a>
+          <a href="https://github.com/Kaushalendra-Marcus/InvoiceGuard-AI/issues" target="_blank" rel="noopener">Report an issue</a>
+        </div>
+        <div class="footer-col">
+          <h4>Details</h4>
+          <span class="muted">Prototype v0.1</span>
+          <span class="muted">10 analyses a day, anonymous</span>
+          <span class="muted">All inference runs locally</span>
+        </div>
+      </div>
+      <div class="container footer-bottom">
+        <span>&copy; 2026 Kaushalendra &#183; InvoiceGuard AI</span>
+        <span>A MATCHED verdict is a finding, never a payment authorization.</span>
+      </div>
     </footer>
   </main>
   <script src="/app.js"></script>
