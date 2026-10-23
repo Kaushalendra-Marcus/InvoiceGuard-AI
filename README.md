@@ -1,5 +1,4 @@
 <div align="center">
-  <img src="assets/logo.png" alt="InvoiceGuard AI logo" width="110"/>
   <h1>InvoiceGuard AI</h1>
   <p><em>AI-assisted invoice ↔ Purchase Order mismatch detection: find the product across different wording, then check every quantity and price with deterministic rules and route anything unsafe to human review.</em></p>
   <p>
@@ -12,7 +11,7 @@
     <code>Pytest</code>
   </p>
   <br/>
-  <img src="design/hero-image.png" alt="InvoiceGuard AI comparing an invoice line against its purchase order line and flagging a quantity mismatch (120 invoiced vs 100 ordered)" width="720"/>
+  <img src="assets/landing.png" alt="InvoiceGuard AI landing page: an invoice and a Purchase Order compared by an AI Match, with a quantity mismatch (120 invoiced vs 100 ordered) flagged" width="860"/>
 </div>
 
 ---
@@ -126,7 +125,7 @@ frontend/                 # Vanilla HTML/CSS/JS single page (no build step)
 ├── index.html            # Landing + workbench; anchors into the sections below
 ├── style.css             # Design system following the mockups in design/
 ├── app.js                # Session id, usage pill, analyze flow, report rendering
-└── assets/               # Logo, hero illustration, bundled sample invoice
+└── assets/               # Logo, hero illustration, landing screenshot, bundled sample invoice
 
 samples/                  # Demo data for the worked example (regenerate via scripts/make_samples.py)
 scripts/                  # Utility scripts

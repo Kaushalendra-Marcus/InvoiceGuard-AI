@@ -85,10 +85,10 @@ h1, h2, h3, h4 { font-weight: 800; }
 .hero-copy { position: relative; z-index: 2; }
 .hero-art { position: relative; z-index: 1; }
 .hero h1 {
-  font-size: clamp(33px, 4.6vw, 56px); font-weight: 800;
+  font-size: clamp(33px, 3.8vw, 46px); font-weight: 800;
   line-height: 1.08; letter-spacing: -0.032em; margin: 18px 0 18px;
 }
-.hero p { color: var(--muted); margin: 0 0 20px; font-size: 15px; max-width: 52ch; }
+.hero p { color: var(--muted); margin: 0 0 20px; font-size: 14.5px; max-width: 52ch; }
 .hero-badge {
   display: inline-flex; align-items: center; gap: 10px;
   color: var(--muted); font-size: 14px; font-weight: 600;
