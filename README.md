@@ -296,6 +296,11 @@ The suite targets the spec's fourteen core cases, matching and money first:
 
 All examples are synthetic invoices/POs; no real vendor data in the repository.
 
+## Deployment
+
+- **Render (full app — frontend + API in one service):** configuration is mirrored in [`render.yaml`](render.yaml). Build: `pip install -r backend/requirements.txt && python scripts/prefetch_model.py` (bakes the ~65 MB BGE-small ONNX model into the deploy image, so cold starts don't re-download it); start: `uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT`. The free plan has an ephemeral disk, so the usage SQLite database resets on every redeploy/restart — acceptable for a demo, documented here so nobody is surprised.
+- **Vercel (static mirror):** [`frontend/vercel.json`](frontend/vercel.json) serves the frontend statically and proxies `/api/v1/*`, `/samples/*`, `/health` and `/docs` to the Render service, keeping every browser call same-origin (no CORS changes needed).
+
 ## Known limitations
 
 - Anonymous sessions are revocable by clearing browser storage; acceptable for a rate-limiting demo, weak against determined abuse.

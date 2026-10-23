@@ -1,0 +1,10 @@
+{
+  "$comment": "Vercel serves the static frontend and proxies API/sample paths to the Render service, keeping every browser call same-origin.",
+  "rewrites": [
+    { "source": "/api/v1/:path*", "destination": "https://invoiceguard-ai-15a1.onrender.com/api/v1/:path*" },
+    { "source": "/health", "destination": "https://invoiceguard-ai-15a1.onrender.com/health" },
+    { "source": "/samples/:path*", "destination": "https://invoiceguard-ai-15a1.onrender.com/samples/:path*" },
+    { "source": "/docs", "destination": "https://invoiceguard-ai-15a1.onrender.com/docs" },
+    { "source": "/openapi.json", "destination": "https://invoiceguard-ai-15a1.onrender.com/openapi.json" }
+  ]
+}
