@@ -174,6 +174,24 @@ def test_po_as_csv(client, exact_invoice_pdf, baseline_po_csv):
     assert payload.json()["status"] == "MATCHED"
 
 
+def test_po_csv_optional_header_fields(client, exact_invoice_pdf, baseline_po_csv):
+    payload = analyze(client, session(), exact_invoice_pdf, baseline_po_csv, po_filename="po.csv")
+    body = payload.json()
+    assert payload.status_code == 200
+    assert body["po_number"] == "PO-2024-1001"
+    assert body["po_currency"] == "INR"
+
+
+def test_po_csv_without_optional_header_fields_stays_null(client, exact_invoice_pdf, baseline_po_csv):
+    lines = [line.split(",")[2:] for line in baseline_po_csv.strip().splitlines()]
+    bare = "\n".join(",".join(fields) for fields in lines) + "\n"
+    payload = analyze(client, session(), exact_invoice_pdf, bare, po_filename="po.csv")
+    body = payload.json()
+    assert payload.status_code == 200
+    assert body["po_number"] is None
+    assert body["po_currency"] is None
+
+
 def test_failed_infra_does_not_consume_allowance(
     client, app_env, monkeypatch, baseline_po_json, exact_invoice_pdf
 ):

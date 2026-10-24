@@ -84,8 +84,9 @@ def _po_from_csv_text(text: str) -> PurchaseOrderDocument:
                 return value or None
         return None
 
+    rows = [row for row in reader]
     items: list[dict[str, Any]] = []
-    for position, row in enumerate(reader, start=2):
+    for position, row in enumerate(rows, start=2):
         try:
             item = {
                 "description": pick(row, "description"),
@@ -102,7 +103,17 @@ def _po_from_csv_text(text: str) -> PurchaseOrderDocument:
         if item["description"] is None:
             continue
         items.append(item)
-    return _po_from_json_text(json.dumps({"items": items}), source_format="csv")
+
+    # Optional header-level columns, repeated per row in real-world exports:
+    # take the first non-empty value provided anywhere in the file.
+    payload: dict[str, Any] = {"items": items, "source_format": "csv"}
+    for field in ("po_number", "currency"):
+        for row in rows:
+            value = pick(row, field)
+            if value:
+                payload[field] = value.upper() if field == "currency" else value
+                break
+    return _po_from_json_text(json.dumps(payload), source_format="csv")
 
 
 def _resolve_purchase_order(
