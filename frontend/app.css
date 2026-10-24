@@ -6,8 +6,9 @@
 /* slim app bar */
 .app-header-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 22px; }
 
-/* page intro */
-.app-main { padding: 44px 0 30px; }
+/* page intro — keep the horizontal .container padding (a bare 0 would
+ * paste the content against the viewport edge on phones) */
+.app-main { padding: 44px 22px 30px; }
 .app-intro { max-width: 720px; margin: 0 auto 34px; text-align: center; }
 .app-kicker {
   display: inline-flex; align-items: center; gap: 8px;
@@ -60,4 +61,12 @@
   .result-grid { grid-template-columns: 1fr; }
   .app-intro { text-align: left; }
   .app-intro p { margin: 0; }
+}
+@media (max-width: 640px) {
+  .app-header-inner { padding: 10px 14px; row-gap: 4px; }
+  .app-main { padding: 34px 16px 24px; }
+  .app-card { padding: 20px 18px; }
+  .actions-row { flex-wrap: wrap; gap: 10px; margin: 24px 0 8px; }
+  .actions-row .btn { flex: 1 1 140px; }
+  .po-file-shell { flex-wrap: wrap; }
 }

@@ -414,7 +414,7 @@ section[id] { scroll-margin-top: 84px; }
 .site-footer { margin-top: 70px; background: #02454f; color: #fff; }
 .footer-scene { line-height: 0; }
 .footer-scene img { display: block; width: 100%; height: auto; }
-.footer-content { position: relative; margin-top: -6vw; padding: 0 0 40px; }
+.footer-content { position: relative; margin-top: -6vw; padding: 0 0 50px; }
 
 .footer-headline {
   font-size: clamp(30px, 3.6vw, 46px); font-weight: 800; line-height: 1.1;
@@ -630,4 +630,46 @@ details.faq p { margin: 0 0 16px; color: var(--muted); font-size: 14px; animatio
   .fe, .step, .case, .price-card, .faq, .site-header, .btn, .dropzone, .tab, .billing-toggle button, details.faq p {
     transition: none !important; animation: none !important;
   }
+}
+
+/* ------------------------------------------------------- mobile refinement */
+html, body { overflow-x: clip; }  /* radial glows / wide art never create a horizontal scrollbar */
+
+@media (max-width: 640px) {
+  /* header: shrink + allow graceful wrap instead of clipping the pill */
+  .header-inner { flex-wrap: wrap; row-gap: 4px; padding: 10px 14px; gap: 10px; }
+  .brand-logo { width: 30px; height: 30px; }
+  .brand-name { font-size: 16.5px; }
+  .icon-circle { width: 32px; height: 32px; }
+  .icon-circle svg { width: 15px; height: 15px; }
+  .usage-pill { font-size: 12px; padding: 7px 12px; gap: 6px; }
+  .usage-pill .usage-icon { width: 13px; height: 13px; }
+
+  /* hero: tighter rhythm, stats stay 3-up with smaller numbers */
+  .hero { padding: 42px 0 20px; gap: 28px; }
+  .hero-stats { flex-wrap: nowrap; gap: 0; margin-top: 20px; }
+  .stat { padding-right: 14px; }
+  .stat + .stat { border-left: 1px solid var(--line); padding-left: 14px; }
+  .stat-value { font-size: 26px; }
+  .stat-label { font-size: 11px; }
+  .hero p { font-size: 14px; }
+
+  /* sections / cards breathe less */
+  .section-block { padding: 44px 0 6px; }
+  .section-head { margin: 0 auto 30px; }
+  .section-head p { font-size: 14.5px; }
+  .fe { padding: 22px 18px; }
+  .step, .case { padding: 20px 18px; }
+  .price-card { padding: 24px 20px; }
+  .price-amount { font-size: 38px; }
+  .price-card .block { margin-top: 20px; }
+  .info-card { padding: 14px 16px; }
+  .cta-band { padding: 32px 18px; margin-top: 44px; }
+  .status-value { font-size: 22px; }
+  .container { padding: 0 16px; }
+}
+
+@media (max-width: 560px) {
+  /* narrow phones: the two decorative circles go; brand + pill always fit one row */
+  .header-inner .icon-circle { display: none; }
 }
