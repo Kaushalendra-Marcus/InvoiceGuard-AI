@@ -66,7 +66,12 @@ def _po_from_csv_text(text: str) -> PurchaseOrderDocument:
             status_code=422,
             detail={
                 "code": "INVALID_PO_CSV",
-                "message": f"Purchase Order CSV is missing required column(s): {', '.join(sorted(missing))}.",
+                "message": (
+                    "Purchase Order CSV is missing required column(s): "
+                    f"{', '.join(sorted(missing))}. The PO side must be a purchase "
+                    "order document (one line per ordered item) — an invoice or a "
+                    "combined invoice/PO test dataset will not parse as a PO."
+                ),
             },
         )
 
