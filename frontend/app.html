@@ -111,12 +111,35 @@ PO-2024-0042,INR,CBL-USB-C-1M,USB-C Cable 1 Meter,100,pcs,150.00"></textarea>
     <section id="result-section" class="hidden">
       <div class="status-banner" id="status-banner">
         <div>
-          <div class="status-label">Status</div>
+          <div class="status-label">Verdict</div>
           <div class="status-value" id="status-value">&middot;</div>
         </div>
         <div class="status-meta">
           <p id="status-summary"></p>
           <p class="action fixed-height" id="status-action"></p>
+        </div>
+        <button class="btn ghost btn-sm" id="btn-pdf" type="button" aria-label="Download PDF report">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          Download report (PDF)
+        </button>
+      </div>
+
+      <div class="stat-row" id="stat-row" aria-label="Analysis summary numbers">
+        <div class="stat-card"><span class="stat-num" id="stat-lines">0</span><span class="stat-label">Line items compared</span></div>
+        <div class="stat-card"><span class="stat-num ok" id="stat-matched">0</span><span class="stat-label">Matched items</span></div>
+        <div class="stat-card"><span class="stat-num warn" id="stat-findings">0</span><span class="stat-label">Findings</span></div>
+        <div class="stat-card"><span class="stat-num amount" id="stat-excess">0</span><span class="stat-label">Potential excess</span></div>
+      </div>
+
+      <div class="chart-grid">
+        <div class="card app-card chart-card">
+          <h3>Amounts: invoice vs purchase order</h3>
+          <div id="totals-chart" class="chart-slot"></div>
+          <p class="muted small" id="totals-note"></p>
+        </div>
+        <div class="card app-card chart-card">
+          <h3>Match confidence</h3>
+          <div id="match-chart" class="chart-slot"></div>
         </div>
       </div>
 
@@ -191,5 +214,6 @@ PO-2024-0042,INR,CBL-USB-C-1M,USB-C Cable 1 Meter,100,pcs,150.00"></textarea>
   </footer>
 
   <script src="/app.js"></script>
+  <script src="/report.js"></script>
 </body>
 </html>
