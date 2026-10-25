@@ -23,6 +23,7 @@
         <a href="#features">Features</a>
         <a href="#how">How it works</a>
         <a href="#checks">What it checks</a>
+        <a href="#platform">Platform</a>
       </nav>
       <div class="nav-right">
         <a class="icon-circle" href="/docs" target="_blank" rel="noopener" title="Interactive API docs" aria-label="API documentation">
@@ -150,6 +151,27 @@
           <h3>Anonymous daily limits</h3>
           <p class="muted">Each browser session gets 10 analyses a day, enforced atomically at midnight IST. No account, no e-mail, no tracking.</p>
         </article>
+        <article class="card fe">
+          <div class="fe-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 14 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.34 19a10 10 0 1 1 17.32 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Per-IP rate protection</h3>
+          <p class="muted">Eight analyses a minute and one hundred per lifetime, per client IP &mdash; on top of the session allowance, enforced with the same atomic pattern. Rotating the anonymous session id unlocks nothing.</p>
+        </article>
+        <article class="card fe">
+          <div class="fe-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 17 6-6-6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 19h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Speaks MCP to AI agents</h3>
+          <p class="muted">A bundled MCP server wraps this API as tools, so assistants like Claude or Cursor can run an invoice review in chat and read the verdict JSON&rsquo;s status, discrepancies and amounts.</p>
+        </article>
+        <article class="card fe">
+          <div class="fe-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 2v5h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 12v6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="m9 15 3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Report-ready evidence</h3>
+          <p class="muted">Verdicts render with a KPI strip, reconciliation and confidence visuals, and export to a branded one-page PDF report for the audit trail &mdash; no screenshots needed.</p>
+        </article>
       </div>
     </section>
 
@@ -204,6 +226,76 @@
       </div>
     </section>
 
+    <section class="section-block" id="platform">
+      <div class="section-head" data-reveal>
+        <span class="kicker">Limits &amp; protection</span>
+        <h2>Free access stays fair, enforced server-side</h2>
+        <p>A public, free analyzer only stays fast and honest when abuse is stopped where it matters: inside the server, atomically, with every rejection explained.</p>
+      </div>
+      <div class="fe-grid" data-reveal-stagger>
+        <article class="card fe">
+          <div class="fe-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.2 1.2 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m9 12 2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Anonymous session allowance</h3>
+          <p class="muted">Ten successful analyses per browser session per day. Capacity is reserved before the expensive work and released on any failure, so crashed requests never consume allowance. Resets at midnight IST.</p>
+          <div class="limit-strip"><b>10</b> per day &middot; per session</div>
+        </article>
+        <article class="card fe">
+          <div class="fe-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.83 2.2a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m22 12.18-9.17 4.16a2 2 0 0 1-1.66 0L2 12.18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="m22 17.18-9.17 4.16a2 2 0 0 1-1.66 0L2 17.18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Per-IP burst and lifetime caps</h3>
+          <p class="muted">Session ids are client-supplied, so a second, identity-agnostic layer keys on the client IP: eight analyses per rolling minute, one hundred per database lifetime. Denied attempts are never billed, and a minute-rate rejection carries a Retry-After countdown.</p>
+          <div class="limit-strip"><b>8</b> per minute &middot; <b>100</b> lifetime &middot; per client IP</div>
+        </article>
+        <article class="card fe">
+          <div class="fe-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 9v4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 17h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Fails honest, never guesses</h3>
+          <p class="muted">Scanned documents without OCR tooling, currency or unit conflicts, missing fields &mdash; each returns an explicit review state or a precise dependency message, never a confident number without evidence.</p>
+          <div class="limit-strip"><b>3</b> verdict states &middot; <b>0</b> silent fallbacks</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section-block" id="agents">
+      <div class="section-head" data-reveal>
+        <span class="kicker">Integrations</span>
+        <h2>Built for AP teams and for AI agents</h2>
+        <p>The REST API is the product: self-documented, callable from any script, and exposed to coding assistants through a bundled MCP server. Every platform limit applies identically to both.</p>
+      </div>
+      <div class="agents-grid" data-reveal-stagger>
+        <article class="card fe">
+          <div class="fe-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5c-1.6 0-3.1-.44-4.38-1.2L3 20l1.2-5.12A8.5 8.5 0 1 1 21 11.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="9" cy="10.5" r="1" fill="currentColor"/><circle cx="15" cy="10.5" r="1" fill="currentColor"/></svg>
+          </div>
+          <h3>REST API, self-documented</h3>
+          <p class="muted">Every check the app runs is one POST away. <a href="/docs" target="_blank" rel="noopener">/docs</a> is an OpenAPI playground; responses are the same verdict JSON the app renders.</p>
+          <div class="code-block"><code>curl -X POST invoiceguard-ai-15a1.onrender.com/api/v1/analyze \
+  -F invoice=@invoice.pdf \
+  -F po_file=@purchase_order.json \
+  -F session_id=anon-41759671</code></div>
+        </article>
+        <article class="card fe">
+          <div class="fe-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 17 6-6-6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 19h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <h3>MCP server for assistants</h3>
+          <p class="muted">Register <span class="mono">invoiceguard_mcp.py</span> with any MCP client and your assistant reviews invoices itself. Answers flow through the same live API, limits included.</p>
+          <ul class="tool-list">
+            <li><code>analyze_invoice</code><span>invoice + PO &rarr; full verdict JSON</span></li>
+            <li><code>usage</code><span>session &rarr; remaining allowance today</span></li>
+          </ul>
+          <div class="code-block"><code>{ "mcpServers": {
+  "invoiceguard": {
+    "command": "python",
+    "args": ["invoiceguard_mcp.py"] } } }</code></div>
+        </article>
+      </div>
+    </section>
+
     <section class="section-block" id="cases">
       <div class="section-head" data-reveal>
         <span class="kicker">Who it is for</span>
@@ -254,6 +346,7 @@
             <li><svg class="check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 13 4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Full matching and validation engine</li>
             <li><svg class="check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 13 4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>10 analyses per day, anonymized</li>
             <li><svg class="check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 13 4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>PDF, JSON and CSV inputs</li>
+            <li><svg class="check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 13 4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>REST API and MCP agent access</li>
             <li><svg class="check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 13 4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>No sign-up, no data retention</li>
           </ul>
           <a class="btn dark block" href="/app.html">Start analyzing</a>
@@ -316,11 +409,19 @@
         </details>
         <details class="faq">
           <summary>What formats does it accept?</summary>
-          <p>Invoices: PDF, PNG, JPG or WEBP up to 10 MB. Purchase orders: JSON or CSV, pasted inline or uploaded as a file. A bundled sample runs the full worked example with one click.</p>
+          <p>Invoices: PDF, PNG, JPG or WEBP up to 10 MB. Purchase orders: JSON or CSV, pasted inline or uploaded as a file. The CSV header needs <code>description</code>, <code>quantity</code>, <code>unit_price</code> and optionally <code>sku</code>, <code>unit</code>, <code>line_total</code>, <code>po_number</code> and <code>currency</code> &mdash; so the PO document header itself can be validated too. Unknown headers are rejected with the exact expected schema, never guessed.</p>
         </details>
         <details class="faq">
           <summary>How are the 10 analyses a day enforced?</summary>
           <p>Server-side. Each anonymous browser session reserves its allowance atomically before analysis starts, so concurrent requests cannot double-spend, and the counter resets at midnight IST.</p>
+        </details>
+        <details class="faq">
+          <summary>Is there protection against scripted abuse?</summary>
+          <p>Yes &mdash; a second layer rates every client IP directly: 8 analyses per rolling minute and 100 per lifetime, enforced with the same atomic database pattern. Because session ids are client-supplied, rotating them grants nothing new; the IP layer responds with <code>429 RATE_LIMIT_MINUTE</code> or <code>RATE_LIMIT_LIFETIME</code>, and minute-limit responses include a <code>Retry-After</code> countdown. Denied attempts never consume allowance.</p>
+        </details>
+        <details class="faq">
+          <summary>Can I automate checks or connect an AI assistant?</summary>
+          <p>That is intended. The REST API is self-documented at <a href="/docs" target="_blank" rel="noopener">/docs</a>, and the repository ships <code>invoiceguard_mcp.py</code> &mdash; an MCP server exposing the API as <code>analyze_invoice</code> and <code>usage</code> tools for Claude Desktop, Cursor or any MCP client. Platform limits apply identically to agents and humans.</p>
         </details>
         <details class="faq">
           <summary>Can I use this to approve payments?</summary>
@@ -384,6 +485,15 @@
           </div>
           <div class="info-card">
             <span class="info-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="m4 17 6-6-6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 19h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </span>
+            <div>
+              <h4>For AI agents</h4>
+              <p><a href="https://github.com/Kaushalendra-Marcus/InvoiceGuard-AI/blob/main/invoiceguard_mcp.py" target="_blank" rel="noopener">invoiceguard_mcp.py</a> &mdash; run invoice reviews from Claude, Cursor or any MCP client.</p>
+            </div>
+          </div>
+          <div class="info-card">
+            <span class="info-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24"><path d="M8 6h8M8 10h8M8 14h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
             </span>
             <div>
@@ -396,7 +506,11 @@
             <pre><code>git clone https://github.com/Kaushalendra-Marcus/InvoiceGuard-AI.git
 cd InvoiceGuard-AI
 python -m venv .venv &amp;&amp; .venv/bin/pip install -r backend/requirements.txt
-.venv/bin/uvicorn backend.app.main:app</code></pre>
+.venv/bin/uvicorn backend.app.main:app
+
+# optional: let AI assistants call it too (MCP)
+.venv/bin/pip install fastmcp httpx
+.venv/bin/python invoiceguard_mcp.py</code></pre>
           </div>
         </aside>
       </div>
@@ -430,6 +544,7 @@ python -m venv .venv &amp;&amp; .venv/bin/pip install -r backend/requirements.tx
             <div class="footer-col">
               <a href="#checks">What it checks</a>
               <a href="https://github.com/Kaushalendra-Marcus/InvoiceGuard-AI" target="_blank" rel="noopener">GitHub</a>
+              <a href="https://github.com/Kaushalendra-Marcus/InvoiceGuard-AI/blob/main/invoiceguard_mcp.py" target="_blank" rel="noopener">For AI agents (MCP)</a>
             </div>
           </div>
           <a class="footer-cta" href="/app.html">Open the app</a>

@@ -325,6 +325,44 @@ section[id] { scroll-margin-top: 84px; }
 .checks-table td:first-child { font-weight: 700; color: var(--ink); white-space: nowrap; }
 .checks-table code { background: var(--blue-soft); color: var(--blue-dark); padding: 1px 7px; border-radius: 6px; font-size: 12.5px; }
 
+/* ------------------------------------------- protection layers + agents */
+.limit-strip {
+  margin-top: 16px; padding-top: 14px;
+  border-top: 1px dashed var(--line);
+  display: flex; flex-wrap: wrap; gap: 4px 16px;
+  font-size: 12.5px; font-weight: 600; color: var(--muted);
+}
+.limit-strip b { color: var(--ink); font-size: 14.5px; font-weight: 800; letter-spacing: -0.01em; }
+
+.agents-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 20px; align-items: stretch; }
+.agents-grid .fe { display: flex; flex-direction: column; }
+.agents-grid .fe p.muted { flex: none; }
+.agents-grid .fe p a { color: var(--blue-dark); font-weight: 600; }
+.agents-grid .code-block { margin-top: auto; }
+
+.code-block {
+  margin-top: 16px; padding: 14px 16px;
+  background: #0f172a; color: #c9d7f5;
+  border-radius: 12px; overflow-x: auto;
+}
+.code-block code {
+  font-family: "SF Mono", "Fira Code", Consolas, monospace;
+  font-size: 12.5px; line-height: 1.7; white-space: pre;
+}
+
+.tool-list { list-style: none; margin: 14px 0 0; padding: 0; }
+.tool-list li {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 0; border-bottom: 1px dashed var(--line);
+  font-size: 13px; color: var(--muted);
+}
+.tool-list li:last-child { border-bottom: 0; }
+.tool-list code {
+  background: var(--blue-soft); color: var(--blue-dark);
+  padding: 2px 9px; border-radius: 6px; flex: none;
+  font-family: "SF Mono", "Fira Code", Consolas, monospace; font-size: 12px;
+}
+
 /* ------------------------------------------------------- pricing (reference) */
 .billing-toggle {
   display: flex; justify-content: center; margin: 0 auto 42px;
@@ -475,7 +513,7 @@ section[id] { scroll-margin-top: 84px; }
   .input-grid, .result-grid { grid-template-columns: 1fr; }
   .status-banner { flex-direction: column; gap: 8px; }
   .hero-art { order: -1; }
-  .fe-grid, .steps, .pricing-grid, .contact-grid { grid-template-columns: 1fr; }
+  .fe-grid, .steps, .pricing-grid, .contact-grid, .agents-grid { grid-template-columns: 1fr; }
   .step:not(:last-child)::after { display: none; }
   .hero-stats { flex-wrap: wrap; gap: 18px; }
   .stat { padding-right: 18px; }
