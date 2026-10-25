@@ -295,6 +295,16 @@ section[id] { scroll-margin-top: 84px; }
 
 /* three-step pipeline */
 .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+/* product tour: real screenshots in card frames */
+.tour-grid { display: grid; grid-template-columns: 1.04fr 0.96fr; gap: 22px; }
+.tour-shot { padding: 0; overflow: hidden; }
+.tour-shot img { display: block; width: 100%; height: auto; border-bottom: 1px solid var(--line); }
+.tour-shot figcaption { padding: 14px 18px 20px; display: grid; gap: 3px; font-size: 13.5px; color: var(--muted); }
+.tour-shot figcaption strong { color: var(--ink); font-size: 14.5px; }
+.tour-link { margin: 26px 0 0; text-align: center; }
+.tour-link a { font-weight: 700; color: var(--blue); }
+.tour-link a:hover { text-decoration: underline; }
 .step { position: relative; padding: 24px 22px; }
 .step-chip {
   display: inline-flex; align-items: center; justify-content: center;
@@ -544,7 +554,7 @@ section[id] { scroll-margin-top: 84px; }
   .input-grid, .result-grid { grid-template-columns: 1fr; }
   .status-banner { flex-direction: column; gap: 8px; }
   .hero-art { order: -1; }
-  .fe-grid, .steps, .pricing-grid, .contact-grid, .agents-grid { grid-template-columns: 1fr; }
+  .fe-grid, .steps, .pricing-grid, .contact-grid, .agents-grid, .tour-grid { grid-template-columns: 1fr; }
   .step:not(:last-child)::after { display: none; }
   .hero-stats { flex-wrap: wrap; gap: 18px; }
   .stat { padding-right: 18px; }

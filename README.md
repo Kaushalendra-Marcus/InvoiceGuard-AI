@@ -54,7 +54,7 @@ Every flagged discrepancy ships with the original values and the arithmetic behi
 
 | Feature | Detail |
 |---|---|
-| Invoice & PO input | Invoice as PDF or image; PO as structured JSON/CSV — the CSV header requires `description`, `quantity`, `unit_price` and takes optional `sku`, `unit`, `line_total`, `po_number`, `currency` (or manual entry) |
+| Invoice & PO input | Invoice as PDF or image; PO as structured JSON/CSV; the CSV header requires `description`, `quantity`, `unit_price` and takes optional `sku`, `unit`, `line_total`, `po_number`, `currency` (or manual entry) |
 | Invoice field extraction | Vendor, invoice number, PO number, currency, line items (description, quantity, unit price, line total), subtotal/total when present |
 | Intelligent line-item matching | SKU → exact → fuzzy → semantic, with contradiction checks (see below) |
 | Quantity & price validation | Deterministic `Decimal` math with configurable tolerances |
@@ -67,6 +67,16 @@ Every flagged discrepancy ships with the original values and the arithmetic behi
 | Tests & docs | Pytest suite over matching, financial rules, usage limiting, rate limiting, and API |
 
 **Explicitly out of scope:** no login/registration, no RBAC, no payments, no ERP integrations, no vector DB (embeddings run in-process), no workflow engines. A focused prototype, not an enterprise platform.
+
+## What the analyzer looks like
+
+Sample run with the bundled files, analyzed live on the deployed app:
+
+| Upload, verdict and key numbers | Budget, matching and findings |
+|---|---|
+| ![Analyzer upload cards and verdict board: NEEDS_REVIEW panel with KPI strip for lines compared, matched items, findings and potential excess](assets/app_results_1.png) | ![KPI strip above the budget utilization card with per-line budget bars, not-billed flags and a total strip, the match confidence donut, line item matches with similarity scores, and the discrepancies list](assets/app_results_2.png) |
+
+The verdict panel names the decision and the next step. The budget card bills every PO line against its budget (over-billed lines get a red overflow flag, never-billed lines are marked `NOT BILLED`, partial shipments stay normal) and totals the full PO budget at the end. Findings carry each rule's values, an amount when one applies, and a plain explanation. The same content is available as a one-page branded PDF.
 
 ## How matching works
 
@@ -130,7 +140,7 @@ frontend/                 # Vanilla HTML/CSS/JS single page (no build step)
 ├── style.css             # Design system following the mockups in design/
 ├── app.js                # Session id, usage pill, analyze flow, report rendering, landing polish
 ├── report.js             # Dependency-free branded PDF discrepancy-report writer
-└── assets/               # Logo, hero illustration, landing screenshot, bundled sample invoice
+└── assets/               # Logo, hero illustration, landing and analyzer-result screenshots, bundled sample invoice
 
 samples/                  # Demo data for the worked example (regenerate via scripts/make_samples.py)
 scripts/                  # Utility scripts
@@ -208,7 +218,7 @@ Simple service health response used by the frontend and monitors.
 
 ### PO CSV schema
 
-The CSV header row is validated; unknown columns are rejected with an explicit `422 INVALID_PO_CSV` message showing the exact expected schema — the parser never guesses which column is which.
+The CSV header row is validated; unknown columns are rejected with an explicit `422 INVALID_PO_CSV` message showing the exact expected schema; the parser never guesses which column is which.
 
 | Column | Required | Notes |
 |---|---|---|
@@ -225,7 +235,7 @@ The CSV header row is validated; unknown columns are rejected with an explicit `
 
 ## Platform protection and access, in one view
 
-Free and public means protected where it matters — inside the server, atomically, with every rejection explained:
+Free and public means protected where it matters: inside the server, atomically, with every rejection explained:
 
 | Layer | Enforces | Rejection | Details |
 |---|---|---|---|
@@ -233,13 +243,13 @@ Free and public means protected where it matters — inside the server, atomical
 | 2 · Per-IP caps | 8 analyses/min + 100 lifetime per client IP; denied attempts are never billed | `429 RATE_LIMIT_MINUTE` / `RATE_LIMIT_LIFETIME` (+ `Retry-After`) | [below](#ip-rate-limiting-8minute-and-100-lifetime-enforced-server-side) |
 | 3 · Honest failure | Weak evidence, missing fields or missing OCR tooling never produce invented numbers | `NEEDS_REVIEW` or an explicit dependency error | [Guardrails](#guardrails-baked-into-the-engine) |
 
-The identical limits apply through the API and the MCP wrapper — agents and browsers are equals.
+The identical limits apply through the API and the MCP wrapper; agents and browsers are equals.
 
 ---
 
 ## Using it from AI agents (MCP)
 
-The platform is not just a web page — it is a public REST API (self-documented at `/docs`), and an MCP server (`invoiceguard_mcp.py` at the repository root) wraps that API so coding assistants can run invoice reviews as tool calls.
+The platform is not just a web page: it is a public REST API (self-documented at `/docs`), and an MCP server (`invoiceguard_mcp.py` at the repository root) wraps that API so coding assistants can run invoice reviews as tool calls.
 
 ```
 pip install fastmcp httpx
@@ -266,7 +276,7 @@ Two tools are exposed:
 | `analyze_invoice(invoice_path, purchase_order_path, session_id?)` | Uploads the files to the live API and returns the full verdict JSON (status, matches, discrepancies with amounts). |
 | `usage(session_id)` | Remaining anonymous-session validations for today (IST reset). |
 
-The server targets the deployed API by default (`INVOICEGUARD_API_URL` overrides it), so transient-layer limits below are enforced by the platform itself — the wrapper adds no policy of its own and surfaces `429` responses (message, code, retry hints) verbatim to the agent.
+The server targets the deployed API by default (`INVOICEGUARD_API_URL` overrides it), so transient-layer limits below are enforced by the platform itself; the wrapper adds no policy of its own and surfaces `429` responses (message, code, retry hints) verbatim to the agent.
 
 ---
 
@@ -290,12 +300,12 @@ Where the enforcement lives and why:
 
 Because session IDs are client-supplied and rotatable, a second, identity-agnostic layer protects the expensive `/analyze` endpoint by **client IP** (`X-Forwarded-For` when behind the proxy, otherwise the socket address) in `backend/app/rate_limiter.py`:
 
-- **8 analyses per rolling minute** per IP — the 9th within the same minute gets `429 RATE_LIMIT_MINUTE` with a `Retry-After` header counting down to the next minute bucket.
-- **100 analyses lifetime** per IP — gets `429 RATE_LIMIT_LIFETIME`. The counter lives in the same SQLite database; on ephemeral hosting (Render free tier) it resets when the service is redeployed or restarted, and the 429 message says exactly that.
-- **Only admitted requests count.** The atomic single-statement upsert (`INSERT … ON CONFLICT … WHERE … RETURNING`) increments both counters exclusively when both caps still have room — a denied burst cannot silently drain the lifetime budget.
+- **8 analyses per rolling minute** per IP; the 9th within the same minute gets `429 RATE_LIMIT_MINUTE` with a `Retry-After` header counting down to the next minute bucket.
+- **100 analyses lifetime** per IP; gets `429 RATE_LIMIT_LIFETIME`. The counter lives in the same SQLite database; on ephemeral hosting (Render free tier) it resets when the service is redeployed or restarted, and the 429 message says exactly that.
+- **Only admitted requests count.** The atomic single-statement upsert (`INSERT ... ON CONFLICT ... WHERE ... RETURNING`) increments both counters exclusively when both caps still have room; a denied burst cannot silently drain the lifetime budget.
 - **Rotating session IDs does not bypass it.** A script that minted fresh anonymous sessions every request is capped at the IP level instead.
 
-Honest caveats: clients sharing one egress IP (office/campus NAT) share these caps, and the lifetime counter is only as durable as the service disk. And like the session IDs, the client-declared `X-Forwarded-For` is trusted as the key — an adversary who spoofs it can rotate it too, so this layer stops casual scripts and uncontrolled bursts, not determined abuse (that would need a trusted proxy header or authentication). Strictness was chosen deliberately: for a free-tier demo the risk profile is scripts, not humans.
+Honest caveats: clients sharing one egress IP (office/campus NAT) share these caps, and the lifetime counter is only as durable as the service disk. And like the session IDs, the client-declared `X-Forwarded-For` is trusted as the key; an adversary who spoofs it can rotate it too, so this layer stops casual scripts and uncontrolled bursts, not determined abuse (that would need a trusted proxy header or authentication). Strictness was chosen deliberately: for a free-tier demo the risk profile is scripts, not humans.
 
 ---
 
