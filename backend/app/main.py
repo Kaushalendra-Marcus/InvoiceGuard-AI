@@ -15,6 +15,7 @@ from fastapi.staticfiles import StaticFiles
 from .api import router as api_router
 from .config import settings
 from .database import get_engine, init_db, session_factory
+from .rate_limiter import RateLimiter
 from .usage_limiter import UsageLimiter
 
 logging.basicConfig(level=logging.INFO)
@@ -41,6 +42,7 @@ async def lifespan(app: FastAPI):
     app.state.engine = engine
     app.state.session_factory = session_factory(settings.db_path)
     app.state.limiter = UsageLimiter(engine)
+    app.state.rate_limiter = RateLimiter(engine)
     yield
     engine.dispose()
 

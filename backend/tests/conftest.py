@@ -28,6 +28,12 @@ def app_env(tmp_path, monkeypatch):
     db_path = tmp_path / "usage.db"
     monkeypatch.setattr(base_settings, "db_path", db_path)
     monkeypatch.setattr(base_settings, "daily_limit", 10)
+    # IP-level rate limiting gets effectively unlimited caps by default so
+    # API tests that push many analyses through one test client (e.g. the
+    # 11-analyses daily-limit test) are not affected; test_rate_limits
+    # re-patches real production values for its fixtures.
+    monkeypatch.setattr(base_settings, "rate_limit_per_minute", 10**9)
+    monkeypatch.setattr(base_settings, "rate_limit_lifetime", 10**9)
     init_db(db_path)
     engine = get_engine(db_path)
     limiter = UsageLimiter(engine)

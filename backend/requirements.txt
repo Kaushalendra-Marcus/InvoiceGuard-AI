@@ -19,6 +19,10 @@ pypdf>=5.0
 # pytesseract>=0.3.13
 # pillow>=10.4
 
+# Optional: MCP server wrapper so AI agents can call the deployed API
+# (see invoiceguard_mcp.py at the repository root)
+# fastmcp>=2.0
+
 # Tests
 pytest>=8.3
 httpx>=0.27

@@ -61,7 +61,9 @@ Every flagged discrepancy ships with the original values and the arithmetic behi
 | Discrepancy detection | Quantity excess/shortfall, unit-price deviation, line-total inconsistency, sub-total/total inconsistency, currency and unit conflicts, missing data |
 | Readable results | Status, matches with confidence, itemized discrepancies with explanations, recommended next action |
 | Anonymous usage limits | 10 successful validations per anonymous session per day, enforced server-side |
-| Tests & docs | Pytest suite over matching, financial rules, usage limiting, and API |
+| IP abuse protection | 8 analyses/minute and 100 lifetime per client IP, enforced server-side (session rotation can't bypass it) |
+| AI-agent access | MCP server wrapper (`invoiceguard_mcp.py`) exposing analyze + usage as tools for coding assistants |
+| Tests & docs | Pytest suite over matching, financial rules, usage limiting, rate limiting, and API |
 
 **Explicitly out of scope:** no login/registration, no RBAC, no payments, no ERP integrations, no vector DB (embeddings run in-process), no workflow engines. A focused prototype, not an enterprise platform.
 
@@ -202,6 +204,39 @@ Simple service health response used by the frontend and monitors.
 
 ---
 
+## Using it from AI agents (MCP)
+
+The platform is not just a web page — it is a public REST API (self-documented at `/docs`), and an MCP server (`invoiceguard_mcp.py` at the repository root) wraps that API so coding assistants can run invoice reviews as tool calls.
+
+```
+pip install fastmcp httpx
+python invoiceguard_mcp.py        # stdio transport
+```
+
+Register it in an MCP client (Claude Desktop, Cursor, OpenCode, …):
+
+```json
+{
+  "mcpServers": {
+    "invoiceguard": {
+      "command": "python",
+      "args": ["/absolute/path/to/InvoiceGuard AI/invoiceguard_mcp.py"]
+    }
+  }
+}
+```
+
+Two tools are exposed:
+
+| Tool | What it does |
+|---|---|
+| `analyze_invoice(invoice_path, purchase_order_path, session_id?)` | Uploads the files to the live API and returns the full verdict JSON (status, matches, discrepancies with amounts). |
+| `usage(session_id)` | Remaining anonymous-session validations for today (IST reset). |
+
+The server targets the deployed API by default (`INVOICEGUARD_API_URL` overrides it), so transient-layer limits below are enforced by the platform itself — the wrapper adds no policy of its own and surfaces `429` responses (message, code, retry hints) verbatim to the agent.
+
+---
+
 ## Anonymous usage limit: 10/day, enforced where it matters
 
 No login, no email, no cookies for accounts. Just a random session ID the browser generates once (stored in local storage) and sends with each request.
@@ -215,6 +250,19 @@ Where the enforcement lives and why:
 - **Concurrency-safe.** WAL mode plus the reserve-then-commit pattern means parallel requests cannot exceed 10 even when they arrive simultaneously; the 11th successful validation gets `429 Too Many Requests`.
 - **Leak protection.** Reservations older than a TTL (default 15 min) are reclaimed so a crashed request cannot permanently eat capacity.
 - **Honest limitation.** Anonymous browser sessions are not real identity; clearing storage gets a fresh allowance. The mechanism exists to demonstrate correct backend rate limiting (atomicity, uniqueness, day rollover), not enterprise-grade abuse prevention. The UI shows `Daily analyses remaining: 7 / 10`, and disables the action with a "resets at midnight IST" message when the allowance is exhausted.
+
+---
+
+## IP rate limiting: 8/minute and 100 lifetime, enforced server-side
+
+Because session IDs are client-supplied and rotatable, a second, identity-agnostic layer protects the expensive `/analyze` endpoint by **client IP** (`X-Forwarded-For` when behind the proxy, otherwise the socket address) in `backend/app/rate_limiter.py`:
+
+- **8 analyses per rolling minute** per IP — the 9th within the same minute gets `429 RATE_LIMIT_MINUTE` with a `Retry-After` header counting down to the next minute bucket.
+- **100 analyses lifetime** per IP — gets `429 RATE_LIMIT_LIFETIME`. The counter lives in the same SQLite database; on ephemeral hosting (Render free tier) it resets when the service is redeployed or restarted, and the 429 message says exactly that.
+- **Only admitted requests count.** The atomic single-statement upsert (`INSERT … ON CONFLICT … WHERE … RETURNING`) increments both counters exclusively when both caps still have room — a denied burst cannot silently drain the lifetime budget.
+- **Rotating session IDs does not bypass it.** A script that minted fresh anonymous sessions every request is capped at the IP level instead.
+
+Honest caveats: clients sharing one egress IP (office/campus NAT) share these caps, and the lifetime counter is only as durable as the service disk. Strictness was chosen deliberately: for a free-tier demo the risk profile is scripts, not humans.
 
 ---
 
@@ -238,6 +286,8 @@ Every value is overridable with `INVOICEGUARD_*` environment variables (or a loc
 | Variable | Default | Purpose |
 |---|---|---|
 | `INVOICEGUARD_DAILY_LIMIT` | `10` | Successful validations per session per day |
+| `INVOICEGUARD_RATE_LIMIT_PER_MINUTE` | `8` | Analyses per rolling minute per client IP |
+| `INVOICEGUARD_RATE_LIMIT_LIFETIME` | `100` | Analyses in the database lifetime per client IP |
 | `INVOICEGUARD_TIMEZONE_NAME` | `Asia/Kolkata` | Calendar day for usage rollover |
 | `INVOICEGUARD_DB_PATH` | `data/invoiceguard.db` | SQLite file path |
 | `INVOICEGUARD_MAX_UPLOAD_BYTES` | `10485760` | Max invoice upload size |

@@ -162,6 +162,57 @@ def _limiter(request: Request):
     return limiter
 
 
+def _rate_limiter(request: Request):
+    """IP-level limiter; optional so tests can construct a bare app."""
+    return getattr(request.app.state, "rate_limiter", None)
+
+
+def _client_ip(request: Request) -> str:
+    """Client IP as seen through the proxy (Render) or the socket directly."""
+    forwarded = request.headers.get("x-forwarded-for")
+    if forwarded:
+        first = forwarded.split(",")[0].strip()
+        if first:
+            return first
+    client = request.client
+    return client.host if client and client.host else "unknown"
+
+
+def _rate_limit_429(decision) -> HTTPException:
+    rate = {
+        "per_minute": decision.per_minute,
+        "lifetime": decision.lifetime,
+        "minute_requests": decision.minute_count,
+        "lifetime_requests": decision.lifetime_count,
+    }
+    if decision.scope == "lifetime":
+        return HTTPException(
+            status_code=429,
+            detail={
+                "code": "RATE_LIMIT_LIFETIME",
+                "message": (
+                    f"Lifetime limit of {decision.lifetime} analyses reached for this "
+                    "client. The counter persists with the service database and "
+                    "resets only when the service is redeployed or restarted."
+                ),
+                "rate": rate,
+            },
+        )
+    return HTTPException(
+        status_code=429,
+        headers={"Retry-After": str(decision.seconds_until_minute_reset)},
+        detail={
+            "code": "RATE_LIMIT_MINUTE",
+            "message": (
+                f"Rate limit of {decision.per_minute} analyses per minute reached "
+                f"for this client. Try again in "
+                f"{decision.seconds_until_minute_reset} seconds."
+            ),
+            "rate": rate,
+        },
+    )
+
+
 # ---------------------------------------------------------------------------
 # Endpoints
 # ---------------------------------------------------------------------------
@@ -178,6 +229,13 @@ async def analyze_invoice(
 ) -> AnalyzeResponse:
     sid = _session_or_422(session_id, x_session_id)
     limiter = _limiter(request)
+
+    # ---------------------------------------------------------------- IP caps
+    rate_limiter = _rate_limiter(request)
+    if rate_limiter is not None:
+        decision = rate_limiter.hit(_client_ip(request))
+        if not decision.allowed:
+            raise _rate_limit_429(decision)
 
     invoice_data = await invoice.read()
     purchase_order = _resolve_purchase_order(po_json, po_csv, po_file or purchase_order_file)

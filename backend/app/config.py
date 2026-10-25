@@ -56,5 +56,12 @@ class Settings(BaseSettings):
     # --- Anonymous session validation ----------------------------------
     session_id_pattern: str = r"^[A-Za-z0-9_-]{8,64}$"
 
+    # --- IP-level abuse protection (analyze endpoint) -------------------
+    # Keys on the client IP because session ids are client-supplied:
+    # at most N analyses per rolling minute, and N in the lifetime of the
+    # database. Only admitted requests count; denials are not billed.
+    rate_limit_per_minute: int = 8
+    rate_limit_lifetime: int = 100
+
 
 settings = Settings()
