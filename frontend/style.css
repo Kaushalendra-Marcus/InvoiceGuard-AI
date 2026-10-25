@@ -414,14 +414,12 @@ section[id] { scroll-margin-top: 84px; }
 .site-footer { margin-top: 70px; background: #02454f; color: #fff; }
 .footer-scene { line-height: 0; }
 .footer-scene img { display: block; width: 100%; height: auto; }
-.footer-content { position: relative; margin-top: -6vw; padding: 0 0 50px; }
+.footer-content { position: relative; margin-top: -11vw; padding: 0 0 50px; }
 
 .footer-headline {
   font-size: clamp(30px, 3.6vw, 46px); font-weight: 800; line-height: 1.1;
-  letter-spacing: -0.02em; margin: 0 0 10px;
+  letter-spacing: -0.02em; margin: 0 0 34px;
 }
-.footer-note { color: rgba(255, 255, 255, 0.66); font-size: 13.5px; margin: 0 0 40px; }
-.footer-note strong { color: rgba(255, 255, 255, 0.88); }
 
 .footer-main {
   display: grid; grid-template-columns: minmax(190px, 1fr) 2.2fr auto;

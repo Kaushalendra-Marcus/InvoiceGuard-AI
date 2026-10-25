@@ -6,7 +6,7 @@
 /* slim app bar */
 .app-header-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 22px; }
 
-/* page intro — keep the horizontal .container padding (a bare 0 would
+/* page intro: keep the horizontal .container padding (a bare 0 would
  * paste the content against the viewport edge on phones) */
 .app-main { padding: 44px 22px 30px; }
 .app-intro { max-width: 720px; margin: 0 auto 34px; text-align: center; }
@@ -49,13 +49,6 @@
 .match-item:hover, .disc-item:hover { background: #fbfcff; }
 .raw-details { border-radius: 14px; }
 .raw-details[open] summary { color: var(--ink); }
-
-/* footer */
-.app-footer {
-  border-top: 1px solid var(--line); margin-top: 34px;
-  padding: 22px 0 30px; color: var(--muted); font-size: 13px; text-align: center;
-}
-.app-footer a { color: var(--blue); font-weight: 600; }
 
 @media (max-width: 900px) {
   .result-grid { grid-template-columns: 1fr; }
