@@ -262,7 +262,7 @@ Because session IDs are client-supplied and rotatable, a second, identity-agnost
 - **Only admitted requests count.** The atomic single-statement upsert (`INSERT … ON CONFLICT … WHERE … RETURNING`) increments both counters exclusively when both caps still have room — a denied burst cannot silently drain the lifetime budget.
 - **Rotating session IDs does not bypass it.** A script that minted fresh anonymous sessions every request is capped at the IP level instead.
 
-Honest caveats: clients sharing one egress IP (office/campus NAT) share these caps, and the lifetime counter is only as durable as the service disk. Strictness was chosen deliberately: for a free-tier demo the risk profile is scripts, not humans.
+Honest caveats: clients sharing one egress IP (office/campus NAT) share these caps, and the lifetime counter is only as durable as the service disk. And like the session IDs, the client-declared `X-Forwarded-For` is trusted as the key — an adversary who spoofs it can rotate it too, so this layer stops casual scripts and uncontrolled bursts, not determined abuse (that would need a trusted proxy header or authentication). Strictness was chosen deliberately: for a free-tier demo the risk profile is scripts, not humans.
 
 ---
 
