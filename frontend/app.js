@@ -32,6 +32,56 @@ const SAMPLE_PO_JSON = {
   ],
 };
 
+/* demo-only dense PO (never shipped in the product sample): the bundled
+ * sample invoice's three items billed against a five-item PO, so the budget
+ * view shows over-budget, fully billed and not-billed rows. */
+const DENSE_PO_JSON = {
+  po_number: "PO-2024-0117",
+  currency: "INR",
+  items: [
+    {
+      description: "USB-C Cable, 1 Meter",
+      sku: "CBL-USB-C-1M",
+      quantity: 100,
+      quantity_unit: "pcs",
+      unit_price: 150.0,
+    },
+    {
+      description: "Laptop Stand",
+      sku: "STD-LAP-001",
+      quantity: 50,
+      quantity_unit: "pcs",
+      unit_price: 800.0,
+    },
+    {
+      description: "HDMI Adapter",
+      sku: "HDMI-ADP-001",
+      quantity: 10,
+      quantity_unit: "pcs",
+      unit_price: 450.0,
+    },
+    {
+      description: "Webcam 1080p with Mic",
+      sku: "CAM-WEB-01",
+      quantity: 6,
+      quantity_unit: "pcs",
+      unit_price: 2200.0,
+    },
+    {
+      description: "Monitor Riser Stand",
+      sku: "RIS-STD-02",
+      quantity: 8,
+      quantity_unit: "pcs",
+      unit_price: 950.0,
+    },
+  ],
+};
+
+function demoSamplePo() {
+  const tag = new URLSearchParams(location.search).get("demo");
+  return tag === "2" ? DENSE_PO_JSON : SAMPLE_PO_JSON;
+}
+
 const $ = (id) => document.getElementById(id);
 const els = {
   invoiceFile: $("invoice-file"),
@@ -64,7 +114,7 @@ const els = {
   statFindings: $("stat-findings"),
   statExcess: $("stat-excess"),
   totalsChart: $("totals-chart"),
-  totalsNote: $("totals-note"),
+  statusSub: $("status-sub"),
   matchChart: $("match-chart"),
   pdfBtn: $("btn-pdf"),
 };
@@ -197,7 +247,7 @@ els.sampleBtn.addEventListener("click", async () => {
   els.poFileInput.classList.add("hidden");
   els.poFileName.classList.add("hidden");
 
-  els.poJson.value = JSON.stringify(SAMPLE_PO_JSON, null, 2);
+  els.poJson.value = JSON.stringify(demoSamplePo(), null, 2);
   els.poFile.value = "";
   syncPoFileState();
   try {
@@ -314,6 +364,14 @@ function renderResult(report) {
   els.statusValue.textContent = report.status;
   els.statusSummary.textContent = report.summary;
   els.statusAction.textContent = "→ " + report.recommended_action;
+  if (els.statusSub) {
+    els.statusSub.textContent =
+      report.status === "MATCHED"
+        ? "Deterministic validation passed"
+        : report.status === "DISCREPANCY_FOUND"
+          ? "Settle or credit the flagged amounts"
+          : "Human review required";
+  }
 
   renderSummaryStats(report);
   renderTotalsChart(report);
@@ -363,18 +421,20 @@ function renderResult(report) {
   discrepancies.forEach((d) => {
     const div = document.createElement("div");
     div.className = `disc-item ${esc((d.severity || "").toLowerCase())}`;
-    const values = [];
-    if (d.line_ref) values.push(`<strong>${esc(d.line_ref)}</strong>`);
-    if (d.invoice_value != null) values.push(`invoice: ${esc(d.invoice_value)}`);
-    if (d.po_value != null) values.push(`PO: ${esc(d.po_value)}`);
-    if (d.difference != null) values.push(`difference: ${esc(d.difference)}`);
+    const cells = [];
+    if (d.line_ref != null && String(d.invoice_value || "").indexOf(String(d.line_ref)) !== 0) {
+      cells.push(["Item", esc(trunc(d.line_ref, 18))]);
+    }
+    if (d.invoice_value != null) cells.push(["Invoice value", esc(d.invoice_value)]);
+    if (d.po_value != null) cells.push(["PO value", esc(d.po_value)]);
+    if (d.difference != null) cells.push(["Difference", esc(d.difference)]);
     if (d.potential_excess_amount != null) {
-      div.classList.add("critical");
-      values.push(`<strong>potential excess: ${fmtAmount(d.potential_excess_amount)}</strong>`);
+      div.classList.add("has-excess");
+      cells.push(["Potential excess", `<span class="alert">${fmtAmount(d.potential_excess_amount)}</span>`]);
     }
     div.innerHTML = `
       <div class="disc-title"><span class="sev-token ${esc((d.severity || "").toLowerCase())}">${esc(d.severity)}</span> ${esc(prettify(d.type))}</div>
-      <div class="disc-values">${values.join(" · ") || ""}</div>
+      ${cells.length ? `<div class="disc-grid">${cells.map(([label, val]) => `<span class="g-cell"><span class="g-label">${label}</span><span class="g-val">${val}</span></span>`).join("")}</div>` : ""}
       <div class="disc-expl">${esc(d.message)} ${esc(d.explanation)}</div>
     `;
     els.discrepancyList.appendChild(div);
@@ -483,48 +543,133 @@ function scoreBar(m) {
     </div>`;
 }
 
-/* horizontal bars: invoice total vs PO line total */
+/* budget utilization: one row per PO item (billed vs its budget), then a
+ * total strip covering ALL PO items, billed or not. */
 function renderTotalsChart(report) {
   if (!els.totalsChart) return;
-  const invoiceTotal = report.invoice_total != null ? Number(report.invoice_total) : null;
-  let poTotal = null;
-  (report.po_items || []).forEach((p) => {
-    const t = poLineTotal(p);
-    if (t != null) poTotal = (poTotal || 0) + t;
-  });
   const currency = report.effective_currency || report.invoice_currency || report.po_currency || "INR";
-  const scale = Math.max(invoiceTotal ?? 0, poTotal ?? 0) || 1;
+  const matches = report.matches || [];
+  const poItems = report.po_items || [];
+
+  const billedByPo = {};
+  matches.forEach((m) => {
+    if (m.matched && m.po_item_index != null && !billedByPo[m.po_item_index]) {
+      billedByPo[m.po_item_index] = m;
+    }
+  });
+  const unbilledByPo = {};
+  (report.po_items_without_invoice || []).forEach((p) => {
+    unbilledByPo[p.po_item_index] = true;
+  });
+
+  /* one row per PO item, in PO order */
+  const rows = poItems.map((p) => {
+    const budget = poLineTotal(p);
+    const m = billedByPo[p.po_item_index];
+    const billed = m && m.invoice_item && m.invoice_item.line_total != null ? Number(m.invoice_item.line_total) : null;
+    return { name: p.description, budget, billed, state: billed == null ? "notbilled" : "billed" };
+  });
+  /* invoice lines with no PO line at all */
+  matches.forEach((m) => {
+    if (!m.matched && m.invoice_item) {
+      const value = m.invoice_item.line_total != null ? Number(m.invoice_item.line_total) : null;
+      rows.push({ name: m.invoice_item.description, budget: null, billed: value, state: "nobudget" });
+    }
+  });
+
+  const values = [];
+  rows.forEach((r) => {
+    if (r.budget != null) values.push(r.budget);
+    if (r.billed != null) values.push(r.billed);
+  });
+  const scale = values.length ? Math.max(...values) : 1;
+  const shownName = (s) => esc(trunc(s, 34));
 
   let html = "";
-  html += amtRow("Invoice", invoiceTotal, scale, (v) => moneyIn(v, currency));
-  html += amtRow("PO budget", poTotal, scale, (v) => moneyIn(v, currency));
-  els.totalsChart.innerHTML = html;
+  rows.forEach((r) => {
+    const poPct = r.budget != null ? Math.max(4, Math.min(100, (r.budget / scale) * 100)) : 0;
+    const invPctOfBudget = r.budget && r.billed != null ? (r.billed / r.budget) * 100 : 0;
+    const invPct = r.billed != null ? Math.max(4, Math.min(100, (r.billed / scale) * 100)) : 0;
+    const over = r.budget && r.billed != null && r.billed > r.budget + 0.005;
+    const overPct = over ? ((r.billed - r.budget) / scale) * 100 : 0;
 
-  const note = [];
-  if (invoiceTotal == null) note.push("Invoice total was not extracted from the document.");
-  if (poTotal == null) note.push("No PO line totals available.");
-  if (invoiceTotal != null && poTotal != null) {
-    const diff = invoiceTotal - poTotal;
-    if (Math.abs(diff) < 0.005) {
-      note.push("Invoice total matches the PO line total.");
+    let nums;
+    if (r.state === "notbilled") {
+      nums = `<span class="b-num"><span class="b-po-label">${moneyIn(r.budget, currency)}</span></span><span class="row-tag">not billed</span>`;
+    } else if (r.state === "nobudget") {
+      nums = `<span class="b-num"><span class="b-inv-label">${moneyIn(r.billed, currency)}</span></span><span class="row-tag bad">no PO line</span>`;
     } else {
-      const pct = (diff / poTotal) * 100;
-      const direction = diff > 0 ? "above" : "below";
-      note.push(`Invoice is ${fmtMoney(Math.abs(diff))} (${Math.abs(pct).toFixed(1)}%) ${direction} the PO total.`);
+      const flag =
+        over ? `<span class="row-flag">+${Math.round(invPctOfBudget - 100)}%</span>` : "";
+      nums =
+        `<span class="b-num"><span class="b-inv-label">${moneyIn(r.billed, currency)}</span>` +
+        ` <span class="b-slash">/</span> <span class="b-po-label">PO ${moneyIn(r.budget, currency)}</span></span>${flag}`;
     }
+
+    html += `
+      <div class="budget-row">
+        <span class="b-name" title="${esc(r.name)}">${shownName(r.name)}</span>
+        <span class="b-track">
+          <span class="b-fill b-po" style="width:${poPct}%"></span>
+          <span class="b-fill b-inv" style="width:${over ? Math.min(100, poPct) : invPct}%"></span>
+          ${over ? `<span class="b-over" style="left:${poPct}%;width:${2 + overPct}%"></span>` : ""}
+        </span>
+        <span class="b-cells">${nums}</span>
+      </div>`;
+  });
+
+  /* total strip: invoice total vs the full PO budget (all items) */
+  let invoiceTotal = report.invoice_total != null ? Number(report.invoice_total) : null;
+  if (invoiceTotal == null) {
+    let sum = 0;
+    let any = false;
+    rows.forEach((r) => {
+      if (r.billed != null) { sum += r.billed; any = true; }
+    });
+    invoiceTotal = any ? sum : null;
   }
-  if (els.totalsNote) els.totalsNote.textContent = note.join(" ");
+  let poTotal = 0;
+  let poCounted = false;
+  poItems.forEach((p) => {
+    const t = poLineTotal(p);
+    if (t != null) { poTotal += t; poCounted = true; }
+  });
+  const billedCount = rows.filter((r) => r.state === "billed").length;
+  const notBilledCount = rows.filter((r) => r.state === "notbilled").length;
+
+  let badge = "";
+  if (invoiceTotal != null && poCounted && poTotal > 0) {
+    const util = (invoiceTotal / poTotal) * 100;
+    const cls = util > 100.05 ? "bad" : util > 60 ? "warn" : "ok";
+    badge = `<span class="chip ${cls}" title="Invoice total as a share of the PO budget">${util < 1 ? util.toFixed(1) : Math.round(util)}% utilized</span>`;
+  }
+
+  const noteBits = [];
+  if (poCounted) {
+    noteBits.push(`PO budget covers all ${poItems.length} item${poItems.length === 1 ? "" : "s"}`);
+    if (notBilledCount) noteBits.push(`${notBilledCount} not billed yet (partial shipment is normal)`);
+  }
+  if (invoiceTotal != null && poCounted && Math.abs(invoiceTotal - poTotal) > 0.005) {
+    const diff = invoiceTotal - poTotal;
+    if (diff > 0) noteBits.push(`billing ${moneyIn(diff, currency)} above the full PO budget`);
+    else noteBits.push(`${moneyIn(-diff, currency)} of the PO budget still open`);
+  }
+  if (invoiceTotal == null) noteBits.push("invoice total not extracted");
+
+  html += `
+    <div class="budget-total">
+      <span class="bt-label">Total</span>
+      <span class="bt-note">${esc(noteBits.join(" · "))}</span>
+      <span class="bt-right"><span class="bt-nums">${invoiceTotal != null ? `<span class="b-inv-label">${esc(moneyIn(invoiceTotal, currency))}</span>` : "-"}${poCounted ? ` <span class="b-slash">/</span> <span class="b-po-label">PO ${esc(moneyIn(poTotal, currency))}</span>` : ""}</span>
+      ${badge}</span>
+    </div>`;
+
+  els.totalsChart.innerHTML = html;
 }
 
-function amtRow(label, value, scale, fmt) {
-  const pct = value == null ? 0 : Math.max(2, Math.min(100, (value / scale) * 100));
-  const fill = label.toLowerCase().includes("po") ? "po" : "invoice";
-  return `
-    <div class="amt-row">
-      <span class="amt-label">${label}</span>
-      <span class="amt-track"><span class="amt-fill ${fill}" style="width:${pct}%"></span></span>
-      <span class="amt-value">${value == null ? "-" : fmt(value)}</span>
-    </div>`;
+function trunc(text, max) {
+  const s = String(text);
+  return s.length > max ? s.slice(0, max - 1).trimEnd() + "…" : s;
 }
 
 function moneyIn(value, currency) {
@@ -547,15 +692,24 @@ function renderMatchDonut(report) {
   const matchedPct = total ? (matched / total) * 100 : 0;
   const R = 54;
   const C = 2 * Math.PI * R;
-  const okLen = total ? (matched / total) * C : 0;
+  const okLen = matched > 0 ? (matched / total) * C : 0;
+  /* dedicated arcs per state so a zero share never draws a stray dot */
+  const greenCircle = matched > 0
+    ? `<circle cx="70" cy="70" r="${R}" fill="none" stroke="#16a34a" stroke-width="15"
+            stroke-dasharray="${okLen.toFixed(2)} ${(C - okLen).toFixed(2)}"
+            stroke-dashoffset="${(okLen / 2).toFixed(2)}" transform="rotate(-90 70 70)" stroke-linecap="round"/>`
+    : "";
+  const grayCircle = matched < total
+    ? `<circle cx="70" cy="70" r="${R}" fill="none" stroke="#cbd5e1" stroke-width="15"
+            stroke-dasharray="${(C - okLen).toFixed(2)} ${C.toFixed(2)}"
+            stroke-dashoffset="${(-okLen / 2).toFixed(2)}" transform="rotate(-90 70 70)"/>`
+    : "";
   const svg = `
     <div class="donut-wrap">
       <svg viewBox="0 0 140 140" role="img" aria-label="Matched share of invoice lines">
         <circle cx="70" cy="70" r="${R}" fill="none" stroke="#eef2f7" stroke-width="15"/>
-        <circle cx="70" cy="70" r="${R}" fill="none" stroke="#cbd5e1" stroke-width="15"
-                stroke-dasharray="${(C - okLen).toFixed(2)} ${C.toFixed(2)}" stroke-dashoffset="${(-okLen / 2).toFixed(2)}" transform="rotate(-90 70 70)"/>
-        <circle cx="70" cy="70" r="${R}" fill="none" stroke="#16a34a" stroke-width="15"
-                stroke-dasharray="${okLen.toFixed(2)} ${(C - okLen).toFixed(2)}" stroke-dashoffset="${(okLen / 2).toFixed(2)}" transform="rotate(-90 70 70)" stroke-linecap="round"/>
+        ${grayCircle}
+        ${greenCircle}
         <text x="70" y="66" text-anchor="middle" font-size="24" font-weight="800" fill="#0f172a">${Math.round(matchedPct)}%</text>
         <text x="70" y="84" text-anchor="middle" font-size="10" font-weight="600" fill="#64748b">items matched</text>
       </svg>

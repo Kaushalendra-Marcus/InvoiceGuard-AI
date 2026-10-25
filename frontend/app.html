@@ -110,32 +110,69 @@ PO-2024-0042,INR,CBL-USB-C-1M,USB-C Cable 1 Meter,100,pcs,150.00"></textarea>
 
     <section id="result-section" class="hidden">
       <div class="status-banner" id="status-banner">
-        <div>
-          <div class="status-label">Verdict</div>
-          <div class="status-value" id="status-value">&middot;</div>
+        <div class="status-side">
+          <span class="status-icon" aria-hidden="true">
+            <svg class="i-ok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m8.5 12 2.5 2.5 4.5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg class="i-warn" viewBox="0 0 24 24"><path d="M12 3.5 21.5 20h-19L12 3.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 10v4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17.2" r="1" fill="currentColor"/></svg>
+            <svg class="i-danger" viewBox="0 0 24 24"><path d="M8.2 3h7.6L21 8.2v7.6L15.8 21H8.2L3 15.8V8.2L8.2 3Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 8v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="16.2" r="1" fill="currentColor"/></svg>
+          </span>
+          <div class="status-titles">
+            <div class="status-label">Verdict</div>
+            <div class="status-value" id="status-value">&middot;</div>
+            <div class="status-sub" id="status-sub"></div>
+          </div>
         </div>
         <div class="status-meta">
           <p id="status-summary"></p>
           <p class="action fixed-height" id="status-action"></p>
         </div>
-        <button class="btn ghost btn-sm" id="btn-pdf" type="button" aria-label="Download PDF report">
+        <button class="btn primary btn-sm" id="btn-pdf" type="button" aria-label="Download PDF report">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
           Download report (PDF)
         </button>
       </div>
 
       <div class="stat-row" id="stat-row" aria-label="Analysis summary numbers">
-        <div class="stat-card"><span class="stat-num" id="stat-lines">0</span><span class="stat-label">Line items compared</span></div>
-        <div class="stat-card"><span class="stat-num ok" id="stat-matched">0</span><span class="stat-label">Matched items</span></div>
-        <div class="stat-card"><span class="stat-num warn" id="stat-findings">0</span><span class="stat-label">Findings</span></div>
-        <div class="stat-card"><span class="stat-num amount" id="stat-excess">0</span><span class="stat-label">Potential excess</span></div>
+        <div class="stat-card">
+          <div class="stat-top">
+            <span class="stat-ico ico-blue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+            <span class="stat-num" id="stat-lines">0</span>
+          </div>
+          <span class="stat-label">Line items compared</span>
+        </div>
+        <div class="stat-card">
+          <div class="stat-top">
+            <span class="stat-ico ico-green" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="stat-num ok" id="stat-matched">0</span>
+          </div>
+          <span class="stat-label">Matched items</span>
+        </div>
+        <div class="stat-card">
+          <div class="stat-top">
+            <span class="stat-ico ico-amber" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 3h15l-1.8 4.5H4V3Zm0 0v18m0-9h13l2 4.5H4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
+            <span class="stat-num warn" id="stat-findings">0</span>
+          </div>
+          <span class="stat-label">Findings</span>
+        </div>
+        <div class="stat-card">
+          <div class="stat-top">
+            <span class="stat-ico ico-red" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v18M17 6.5H9.5a2.75 2.75 0 0 0 0 5.5h5a2.75 2.75 0 0 1 0 5.5H6.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+            <span class="stat-num amount" id="stat-excess">0</span>
+          </div>
+          <span class="stat-label">Potential excess</span>
+        </div>
       </div>
 
       <div class="chart-grid">
         <div class="card app-card chart-card">
-          <h3>Amounts: invoice vs purchase order</h3>
-          <div id="totals-chart" class="chart-slot"></div>
-          <p class="muted small" id="totals-note"></p>
+          <div class="card-title-row">
+            <h3>Budget utilization</h3>
+            <div class="budget-legend">
+              <span class="lg-item"><i class="lg-dot lg-inv"></i>Invoice billed</span>
+              <span class="lg-item"><i class="lg-dot lg-po"></i>PO line budget</span>
+            </div>
+          </div>
+          <div id="totals-chart" class="chart-slot budget-list"></div>
         </div>
         <div class="card app-card chart-card">
           <h3>Match confidence</h3>

@@ -252,12 +252,20 @@
     need(92);
     txt(ops, MARGIN, y, 11.5, "F2", "Amounts", C.ink);
     y -= 16;
+    /* unbilled PO value: budget for items the invoice does not bill */
+    let unbilled = null;
+    if (poTotal != null && invoiceTotal != null && poTotal - invoiceTotal > 0.005) {
+      unbilled = poTotal - invoiceTotal;
+    }
     const rows = [
       ["Invoice total", invoiceTotal == null ? "not extracted" : fmtINR(invoiceTotal)],
-      ["PO line totals", poTotal == null ? "no PO totals" : fmtINR(poTotal)],
+      ["PO total budget (all items)", poTotal == null ? "no PO totals" : fmtINR(poTotal)],
       ["Difference", invoiceTotal == null || poTotal == null ? "n/a" : fmtINR(invoiceTotal - poTotal)],
       ["Potential excess (findings)", excess > 0 ? fmtINR(excess) : "none"],
     ];
+    if (unbilled != null) {
+      rows.splice(2, 0, ["Unbilled PO budget (partial shipment ok)", fmtINR(unbilled)]);
+    }
     rows.forEach(([label, value]) => {
       txt(ops, MARGIN + 8, y, 9.5, "F1", label, C.muted);
       rightAligned(ops, PAGE_W - MARGIN - 8, y, 9.5, value, C.ink, true);
