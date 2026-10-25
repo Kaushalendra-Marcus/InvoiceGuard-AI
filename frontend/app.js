@@ -871,3 +871,76 @@ if (contactForm && contactNote) {
     statValues.forEach((el) => co.observe(el));
   }
 })();
+
+/* ------------------------------------------------ landing: copy-code buttons */
+(function enableCopyButtons() {
+  const buttons = document.querySelectorAll(".copy-btn[data-copy]");
+  if (!buttons.length) return;
+
+  async function writeText(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return;
+    }
+    /* insecure-context fallback: temporary textarea + execCommand */
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    ta.remove();
+  }
+
+  buttons.forEach((btn) => {
+    const idleLabel = btn.getAttribute("data-copy") || "Copy to clipboard";
+    btn.addEventListener("click", async () => {
+      const wrap = btn.closest(".code-wrap") || btn.closest(".run-card");
+      const code = wrap && (wrap.querySelector("pre code") || wrap.querySelector("code"));
+      if (!code) return;
+      const text = code.textContent.replace(/^\n+/, "").replace(/\s+$/, "");
+      try {
+        await writeText(text);
+        btn.classList.add("copied");
+        btn.setAttribute("aria-label", "Copied");
+        btn.setAttribute("title", "Copied!");
+        setTimeout(() => {
+          btn.classList.remove("copied");
+          btn.setAttribute("aria-label", idleLabel);
+          btn.setAttribute("title", "Copy");
+        }, 1600);
+      } catch {
+        /* clipboard unavailable (denied permission): fail silently */
+      }
+    });
+  });
+})();
+
+/* ------------------------------------------------ landing: scrollspy chips */
+(function scrollSpy() {
+  const links = Array.from(document.querySelectorAll(".nav-chips a[href^='#']"));
+  if (!links.length || !("IntersectionObserver" in window)) return;
+  const sections = links
+    .map((a) => document.getElementById(a.getAttribute("href").slice(1)))
+    .filter(Boolean);
+  if (!sections.length) return;
+
+  function setActive(id) {
+    links.forEach((a) => a.classList.toggle("active", a.getAttribute("href") === "#" + id));
+  }
+
+  setActive(sections[0].id);
+  /* a section "owns" the nav chip while it crosses the middle band of the viewport */
+  const io = new IntersectionObserver(
+    (entries) => {
+      const visible = entries
+        .filter((e) => e.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+      if (visible.length) setActive(visible[0].target.id);
+    },
+    { rootMargin: "-35% 0px -55% 0px", threshold: 0 }
+  );
+  sections.forEach((s) => io.observe(s));
+})();

@@ -363,6 +363,37 @@ section[id] { scroll-margin-top: 84px; }
   font-family: "SF Mono", "Fira Code", Consolas, monospace; font-size: 12px;
 }
 
+/* copy buttons floating over dark code blocks (agents cards + run card) */
+.code-wrap { position: relative; }
+.code-wrap .code-block { margin-top: 16px; padding-right: 52px; }
+.agents-grid .code-wrap { margin-top: auto; }
+.agents-grid .code-wrap .code-block { margin-top: 16px; }
+
+.copy-btn {
+  position: absolute; top: 10px; right: 10px; z-index: 2;
+  width: 30px; height: 30px; border-radius: 8px;
+  border: 1px solid rgba(201, 215, 245, 0.35); background: rgba(15, 23, 42, 0.55);
+  color: #c9d7f5; cursor: pointer;
+  display: grid; place-items: center; flex: none;
+  transition: background .18s ease, border-color .18s ease, color .18s ease, transform .18s ease;
+  backdrop-filter: blur(4px);
+}
+.copy-btn svg { width: 14px; height: 14px; }
+.copy-btn .check-icon { display: none; }
+.copy-btn:hover { background: rgba(37, 99, 235, 0.3); border-color: #7fa4e6; color: #fff; }
+.copy-btn:active { transform: scale(0.94); }
+.copy-btn:focus-visible { outline: 2px solid #7fa4e6; outline-offset: 2px; }
+.copy-btn.copied { border-color: #86efac; color: #86efac; background: rgba(22, 101, 52, 0.4); }
+.copy-btn.copied .copy-icon { display: none; }
+.copy-btn.copied .check-icon { display: block; }
+
+.run-card .copy-btn { background: rgba(255, 255, 255, 0.08); }
+.run-card .copy-btn:hover { background: rgba(37, 99, 235, 0.35); }
+.run-card pre { padding-right: 48px; }
+
+/* scrollspy: the nav chip of the section in view stays highlighted */
+.nav-chips a.active { border-color: var(--blue); color: var(--blue-dark); background: var(--blue-soft); }
+
 /* ------------------------------------------------------- pricing (reference) */
 .billing-toggle {
   display: flex; justify-content: center; margin: 0 auto 42px;
@@ -663,7 +694,7 @@ details.faq p { margin: 0 0 16px; color: var(--muted); font-size: 14px; animatio
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   [data-reveal], [data-reveal-stagger] > * { opacity: 1; transform: none; transition: none; }
-  .fe, .step, .case, .price-card, .faq, .site-header, .btn, .dropzone, .tab, .billing-toggle button, details.faq p {
+  .fe, .step, .case, .price-card, .faq, .site-header, .btn, .dropzone, .tab, .billing-toggle button, details.faq p, .copy-btn {
     transition: none !important; animation: none !important;
   }
 }

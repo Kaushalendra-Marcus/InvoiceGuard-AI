@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>InvoiceGuard AI · Invoice vs PO mismatch detector</title>
   <meta name="description" content="Compares supplier invoices against Purchase Orders with semantic matching and deterministic financial validation." />
+  <meta name="theme-color" content="#fafbff" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="InvoiceGuard AI · Invoice vs PO mismatch detector" />
+  <meta property="og:description" content="Recognize the product across wording differences, then validate invoiced quantities and prices against the PO with deterministic rules. 10 free analyses a day, no sign-up, agents welcome." />
+  <meta property="og:image" content="https://invoiceguard-ai-15a1.onrender.com/assets/landing.png" />
+  <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -50,7 +56,7 @@
           <span class="badge-dot" aria-hidden="true">
             <svg viewBox="0 0 24 24"><path d="m8.5 12.5 2.5 2.5 4.5-5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </span>
-          10 free analyses a day &#183; no sign-up
+          10 free analyses a day &#183; no sign-up &#183; agents welcome
         </span>
         <h1>Stop paying wrong invoices.<br/>Catch what string&nbsp;matching and semantic&nbsp;matching both miss.</h1>
         <p>
@@ -273,10 +279,17 @@
           </div>
           <h3>REST API, self-documented</h3>
           <p class="muted">Every check the app runs is one POST away. <a href="/docs" target="_blank" rel="noopener">/docs</a> is an OpenAPI playground; responses are the same verdict JSON the app renders.</p>
-          <div class="code-block"><code>curl -X POST invoiceguard-ai-15a1.onrender.com/api/v1/analyze \
+          <div class="code-wrap">
+            <div class="code-block"><code>API=https://invoiceguard-ai-15a1.onrender.com
+curl -X POST $API/api/v1/analyze \
   -F invoice=@invoice.pdf \
   -F po_file=@purchase_order.json \
   -F session_id=anon-41759671</code></div>
+            <button class="copy-btn" type="button" data-copy="Copy the API example" aria-label="Copy the API example" title="Copy">
+              <svg class="copy-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+              <svg class="check-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 13 4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
         </article>
         <article class="card fe">
           <div class="fe-icon">
@@ -288,10 +301,16 @@
             <li><code>analyze_invoice</code><span>invoice + PO &rarr; full verdict JSON</span></li>
             <li><code>usage</code><span>session &rarr; remaining allowance today</span></li>
           </ul>
-          <div class="code-block"><code>{ "mcpServers": {
+          <div class="code-wrap">
+            <div class="code-block"><code>{ "mcpServers": {
   "invoiceguard": {
     "command": "python",
     "args": ["invoiceguard_mcp.py"] } } }</code></div>
+            <button class="copy-btn" type="button" data-copy="Copy the MCP registration" aria-label="Copy the MCP registration" title="Copy">
+              <svg class="copy-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+              <svg class="check-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 13 4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
         </article>
       </div>
     </section>
@@ -503,6 +522,10 @@
           </div>
           <div class="run-card" aria-label="Run InvoiceGuard locally">
             <span class="run-title">RUN IT LOCALLY</span>
+            <button class="copy-btn" type="button" data-copy="Copy the setup commands" aria-label="Copy the setup commands" title="Copy">
+              <svg class="copy-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+              <svg class="check-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 13 4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
             <pre><code>git clone https://github.com/Kaushalendra-Marcus/InvoiceGuard-AI.git
 cd InvoiceGuard-AI
 python -m venv .venv &amp;&amp; .venv/bin/pip install -r backend/requirements.txt

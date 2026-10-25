@@ -54,12 +54,13 @@ Every flagged discrepancy ships with the original values and the arithmetic behi
 
 | Feature | Detail |
 |---|---|
-| Invoice & PO input | Invoice as PDF or image; PO as structured JSON/CSV (manual entry optional) |
+| Invoice & PO input | Invoice as PDF or image; PO as structured JSON/CSV — the CSV header requires `description`, `quantity`, `unit_price` and takes optional `sku`, `unit`, `line_total`, `po_number`, `currency` (or manual entry) |
 | Invoice field extraction | Vendor, invoice number, PO number, currency, line items (description, quantity, unit price, line total), subtotal/total when present |
 | Intelligent line-item matching | SKU → exact → fuzzy → semantic, with contradiction checks (see below) |
 | Quantity & price validation | Deterministic `Decimal` math with configurable tolerances |
 | Discrepancy detection | Quantity excess/shortfall, unit-price deviation, line-total inconsistency, sub-total/total inconsistency, currency and unit conflicts, missing data |
-| Readable results | Status, matches with confidence, itemized discrepancies with explanations, recommended next action |
+| Readable results | Verdict banner, KPI strip, reconciliation and confidence visuals, itemized discrepancies with explanations, recommended next action |
+| Report-ready output | Every verdict exports as a branded one-page PDF discrepancy report (`frontend/report.js`, zero dependencies) |
 | Anonymous usage limits | 10 successful validations per anonymous session per day, enforced server-side |
 | IP abuse protection | 8 analyses/minute and 100 lifetime per client IP, enforced server-side (session rotation can't bypass it) |
 | AI-agent access | MCP server wrapper (`invoiceguard_mcp.py`) exposing analyze + usage as tools for coding assistants |
@@ -118,7 +119,8 @@ backend/app/
 ├── matching.py           # Stages 2 to 4: SKU/exact/fuzzy/semantic matcher + contradiction checks
 ├── financial_validator.py# Stage 5: deterministic Decimal validation & discrepancy generation
 ├── analysis_service.py   # Stage 6: decision assembly & report
-├── usage_limiter.py      # Anonymous daily limit with atomic reservation
+├── usage_limiter.py      # Layer 1: anonymous daily limit with atomic reservation
+├── rate_limiter.py       # Layer 2: per-IP limits (8/min + 100 lifetime), single-statement atomic upsert
 ├── document_parser.py    # PDF text parser + OCR for scans
 ├── api.py                # FastAPI routes
 └── main.py               # App entrypoint (exports the UI in full-stack mode)
@@ -126,11 +128,13 @@ backend/app/
 frontend/                 # Vanilla HTML/CSS/JS single page (no build step)
 ├── index.html            # Landing + workbench; anchors into the sections below
 ├── style.css             # Design system following the mockups in design/
-├── app.js                # Session id, usage pill, analyze flow, report rendering
+├── app.js                # Session id, usage pill, analyze flow, report rendering, landing polish
+├── report.js             # Dependency-free branded PDF discrepancy-report writer
 └── assets/               # Logo, hero illustration, landing screenshot, bundled sample invoice
 
 samples/                  # Demo data for the worked example (regenerate via scripts/make_samples.py)
 scripts/                  # Utility scripts
+invoiceguard_mcp.py       # Optional MCP server (fastmcp) wrapping the API for AI assistants
 ```
 
 Design notes:
@@ -201,6 +205,35 @@ Returns the daily limit (10), successful validations so far today, remaining all
 ### `GET /health`
 
 Simple service health response used by the frontend and monitors.
+
+### PO CSV schema
+
+The CSV header row is validated; unknown columns are rejected with an explicit `422 INVALID_PO_CSV` message showing the exact expected schema — the parser never guesses which column is which.
+
+| Column | Required | Notes |
+|---|---|---|
+| `description` | ✅ | Line item text as written on the PO |
+| `quantity` | ✅ | Ordered quantity |
+| `unit_price` | ✅ | Agreed unit price |
+| `sku` | optional | Stock identifier; SKU matches take priority, and a SKU match with a contradictory description is a contradiction |
+| `unit` | optional | Quantity unit (`pcs`, `m`, …); incompatible units suppress money math |
+| `line_total` | optional | Cross-checked against `quantity × unit_price` when present |
+| `po_number` | optional | Validated and echoed in the response's `po_number` field |
+| `currency` | optional | 3-letter code; validated against the invoice's currency instead of falling back to the default |
+
+---
+
+## Platform protection and access, in one view
+
+Free and public means protected where it matters — inside the server, atomically, with every rejection explained:
+
+| Layer | Enforces | Rejection | Details |
+|---|---|---|---|
+| 1 · Session allowance | 10 successful analyses/day per anonymous session, atomic reserve → commit/release, IST reset | `429 DAILY_LIMIT_REACHED` | [below](#anonymous-usage-limit-10day-enforced-where-it-matters) |
+| 2 · Per-IP caps | 8 analyses/min + 100 lifetime per client IP; denied attempts are never billed | `429 RATE_LIMIT_MINUTE` / `RATE_LIMIT_LIFETIME` (+ `Retry-After`) | [below](#ip-rate-limiting-8minute-and-100-lifetime-enforced-server-side) |
+| 3 · Honest failure | Weak evidence, missing fields or missing OCR tooling never produce invented numbers | `NEEDS_REVIEW` or an explicit dependency error | [Guardrails](#guardrails-baked-into-the-engine) |
+
+The identical limits apply through the API and the MCP wrapper — agents and browsers are equals.
 
 ---
 
@@ -342,6 +375,7 @@ The suite targets the spec's fourteen core cases, matching and money first:
 - **Matching:** exact match with clean numbers · different descriptions, same product (the motivating case) · ambiguous semantic near-tie → `NEEDS_REVIEW` · missing/contradictory SKU · incompatible units suppress money math
 - **Financial:** quantity mismatch (+excess, −shortfall) · unit-price mismatch · line-total internal inconsistency · subtotal/total inconsistency · missing financial data never fabricated
 - **Usage limiter:** successful validation increments the counter · failed validation releases the reservation without consuming allowance · 11th validation of the day rejected with `429` · parallel requests never exceed the limit · usage resets on the next Asia/Kolkata day · day computed by the server, never the client
+- **Rate and IP limits:** 9th analysis within a minute rejected with `429` + `Retry-After` · rotating session ids cannot bypass the per-IP cap · lifetime cap exhausts to a permanent `429` · denied attempts never consume the lifetime allowance · minute window rolls over correctly across hour boundaries
 - **API:** document validation, sample end-to-end
 
 All examples are synthetic invoices/POs; no real vendor data in the repository.
