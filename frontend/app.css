@@ -133,7 +133,7 @@
 @media (max-width: 900px) {
   .stat-row { grid-template-columns: repeat(2, 1fr); }
   .chart-grid { grid-template-columns: 1fr; }
-  #status-banner { flex-wrap: wrap; }
+  #status-banner { flex-wrap: wrap; align-items: stretch; }
   #btn-pdf { flex: 1 1 auto; justify-content: center; }
   .amt-row { grid-template-columns: 78px 1fr auto; }
   .amt-value { min-width: 86px; }
