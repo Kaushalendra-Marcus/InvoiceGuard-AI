@@ -12,6 +12,19 @@
 
   <link rel="stylesheet" href="/style.css" />
   <link rel="stylesheet" href="/app.css" />
+
+  <!-- Vercel first-party analytics (vanilla equivalent of @vercel/analytics;
+       the React component does not apply to this build-step-free frontend).
+       Activates on supported hosts; elsewhere the script is skipped. -->
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    if (/(^|\.)vercel\.app$/.test(window.location.hostname)) {
+      var s = document.createElement("script");
+      s.src = "/_vercel/insights/script.js";
+      s.defer = true;
+      document.head.appendChild(s);
+    }
+  </script>
 </head>
 <body>
   <header class="site-header">
@@ -91,6 +104,46 @@
         <textarea id="po-csv" class="po-editor mono hidden" placeholder="po_number,currency,sku,description,quantity,unit,unit_price
 PO-2024-0042,INR,CBL-USB-C-1M,USB-C Cable 1 Meter,100,pcs,150.00"></textarea>
         <p class="app-hint muted small">SKU, description, quantity, unit and unit price are read per line item.</p>
+      </div>
+    </section>
+
+    <section class="input-grid preview-grid" data-reveal aria-label="File previews">
+      <div class="card app-card preview-card" id="invoice-preview-card">
+        <div class="card-title-row">
+          <h3>Invoice preview</h3>
+          <div class="preview-meta" id="invoice-preview-meta"></div>
+          <div class="preview-actions">
+            <a id="invoice-preview-open" class="preview-link" target="_blank" rel="noopener" title="Open the invoice in a browser tab" aria-label="Open the invoice in a new tab" hidden>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3h7v7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 3 11 13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M19 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>Open</span>
+            </a>
+            <a id="invoice-preview-download" class="preview-link" title="Download the invoice" aria-label="Download the invoice" hidden>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>Save</span>
+            </a>
+          </div>
+        </div>
+        <div class="preview-slot" id="invoice-preview"></div>
+        <p class="app-hint muted small">PDFs render with the browser's viewer; images inline; nothing is uploaded to preview.</p>
+      </div>
+
+      <div class="card app-card preview-card" id="po-preview-card">
+        <div class="card-title-row">
+          <h3>Purchase Order preview</h3>
+          <div class="preview-meta" id="po-preview-meta"></div>
+          <div class="preview-actions">
+            <a id="po-preview-open" class="preview-link" target="_blank" rel="noopener" title="Open the Purchase Order in a browser tab" aria-label="Open the Purchase Order in a new tab" hidden>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3h7v7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 3 11 13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M19 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>Open</span>
+            </a>
+            <a id="po-preview-download" class="preview-link" title="Download the Purchase Order" aria-label="Download the Purchase Order" hidden>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>Save</span>
+            </a>
+          </div>
+        </div>
+        <div class="preview-slot" id="po-preview"></div>
+        <p class="app-hint muted small">.json files pretty-print; .csv files show as a table-like text view.</p>
       </div>
     </section>
 
@@ -252,5 +305,6 @@ PO-2024-0042,INR,CBL-USB-C-1M,USB-C Cable 1 Meter,100,pcs,150.00"></textarea>
 
   <script src="/app.js"></script>
   <script src="/report.js"></script>
+  <script src="/preview.js" defer></script>
 </body>
 </html>

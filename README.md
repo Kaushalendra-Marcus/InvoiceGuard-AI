@@ -60,6 +60,7 @@ Every flagged discrepancy ships with the original values and the arithmetic behi
 | Quantity & price validation | Deterministic `Decimal` math with configurable tolerances |
 | Discrepancy detection | Quantity excess/shortfall, unit-price deviation, line-total inconsistency, sub-total/total inconsistency, currency and unit conflicts, missing data |
 | Readable results | Verdict banner, KPI strip, reconciliation and confidence visuals, itemized discrepancies with explanations, recommended next action |
+| In-browser file preview | Uploaded invoice and Purchase Order files render right on the analyzer page — PDFs in the browser's viewer, images inline, JSON pretty-printed / CSV as text — with Open-tab and Save actions per file; nothing leaves the host |
 | Report-ready output | Every verdict exports as a branded one-page PDF discrepancy report (`frontend/report.js`, zero dependencies) |
 | Anonymous usage limits | 10 successful validations per anonymous session per day, enforced server-side |
 | IP abuse protection | 8 analyses/minute and 100 lifetime per client IP, enforced server-side (session rotation can't bypass it) |
@@ -393,7 +394,7 @@ All examples are synthetic invoices/POs; no real vendor data in the repository.
 ## Deployment
 
 - **Render (full app: frontend + API in one service):** configuration is mirrored in [`render.yaml`](render.yaml). Build: `pip install -r backend/requirements.txt && python scripts/prefetch_model.py` (bakes the ~65 MB BGE-small ONNX model into the deploy image, so cold starts don't re-download it); start: `uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT`. The free plan has an ephemeral disk, so the usage SQLite database resets on every redeploy or restart. That is acceptable for a demo and is documented here so nobody is surprised.
-- **Vercel (static mirror):** [`frontend/vercel.json`](frontend/vercel.json) serves the frontend statically and proxies `/api/v1/*`, `/samples/*`, `/health` and `/docs` to the Render service, keeping every browser call same-origin (no CORS changes needed).
+- **Vercel (static mirror):** [`frontend/vercel.json`](frontend/vercel.json) serves the frontend statically and proxies `/api/v1/*`, `/samples/*`, `/health` and `/docs` to the Render service, keeping every browser call same-origin (no CORS changes needed). First-party Vercel Analytics is wired with the vanilla script snippet (the React `@vercel/analytics` component does not apply to this build-step-free frontend); it self-activates on supported hosts and is a no-op elsewhere. Enable Analytics for the project in the Vercel dashboard to start collecting.
 
 ## Known limitations
 

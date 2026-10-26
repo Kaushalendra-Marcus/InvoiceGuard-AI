@@ -11,6 +11,19 @@
   <meta property="og:description" content="Recognize the product across wording differences, then validate invoiced quantities and prices against the PO with deterministic rules. 10 free analyses a day, no sign-up, agents welcome." />
   <meta property="og:image" content="https://invoiceguard-ai-15a1.onrender.com/assets/landing.png" />
   <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Vercel first-party analytics (vanilla equivalent of @vercel/analytics;
+       the React component does not apply to this build-step-free frontend).
+       Activates on supported hosts; elsewhere the script is skipped. -->
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    if (/(^|\.)vercel\.app$/.test(window.location.hostname)) {
+      var s = document.createElement("script");
+      s.src = "/_vercel/insights/script.js";
+      s.defer = true;
+      document.head.appendChild(s);
+    }
+  </script>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
