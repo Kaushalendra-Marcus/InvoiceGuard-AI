@@ -778,6 +778,100 @@ if (els.pdfBtn) {
     }, 200);
   });
 })();
+/* landing only: product tour carousel, auto-advance + manual controls, no deps */
+(function tourCarousel() {
+  const viewer = document.getElementById("tour-viewer");
+  if (!viewer) return;
+  const slides = Array.from(viewer.querySelectorAll(".tour-slide"));
+  const dots = Array.from(viewer.querySelectorAll(".tour-dot"));
+  const caption = viewer.querySelector(".tour-caption");
+  const zoom = viewer.querySelector(".tour-zoom");
+  const prevBtn = viewer.querySelector(".tour-prev");
+  const nextBtn = viewer.querySelector(".tour-next");
+  if (slides.length < 2 || dots.length !== slides.length || !caption) return;
+
+  const INTERVAL = 5200;
+  const reducedMotion =
+    window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let index = 0;
+  let timer = null;
+  let hovered = false;
+
+  function show(next, manual) {
+    index = (next + slides.length) % slides.length;
+    slides.forEach((slide, n) => slide.classList.toggle("is-active", n === index));
+    dots.forEach((dot, n) => dot.classList.toggle("is-active", n === index));
+    const active = slides[index];
+    caption.innerHTML =
+      "<strong>" + esc(active.dataset.title || "") + "</strong><span>" +
+      esc(active.dataset.sub || "") + "</span>";
+    const img = active.querySelector("img");
+    if (zoom && img) zoom.setAttribute("href", img.getAttribute("src"));
+    if (manual) restartTimer();
+  }
+
+  function startTimer() {
+    if (timer || reducedMotion || hovered || document.hidden) return;
+    timer = setInterval(() => {
+      if (document.hidden) return;
+      /* autoplay only while the card is actually on screen */
+      const rect = viewer.getBoundingClientRect();
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      const visible = rect.bottom > 140 && rect.top < vh - 80;
+      if (visible) show(index + 1);
+    }, INTERVAL);
+  }
+  function stopTimer() {
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+    }
+  }
+  function restartTimer() {
+    stopTimer();
+    startTimer();
+  }
+
+  prevBtn.addEventListener("click", () => show(index - 1, true));
+  nextBtn.addEventListener("click", () => show(index + 1, true));
+  dots.forEach((dot, n) => dot.addEventListener("click", () => show(n, true)));
+
+  ["pointerenter", "focusin"].forEach((ev) =>
+    viewer.addEventListener(ev, () => { hovered = true; stopTimer(); }, true)
+  );
+  ["pointerleave", "focusout"].forEach((ev) =>
+    viewer.addEventListener(ev, () => { hovered = false; startTimer(); }, true)
+  );
+
+  let touchX = null;
+  viewer.addEventListener("touchstart", (e) => {
+    touchX = e.touches[0].clientX;
+    hovered = true;
+    stopTimer();
+  }, { passive: true });
+  viewer.addEventListener("touchend", (e) => {
+    if (touchX != null) {
+      const delta = e.changedTouches[0].clientX - touchX;
+      if (Math.abs(delta) > 48) show(index + (delta < 0 ? 1 : -1), true);
+    }
+    touchX = null;
+    setTimeout(() => { hovered = false; startTimer(); }, 500);
+  }, { passive: true });
+
+  viewer.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") { e.preventDefault(); show(index - 1, true); }
+    if (e.key === "ArrowRight") { e.preventDefault(); show(index + 1, true); }
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stopTimer();
+    else startTimer();
+  });
+
+  show(0);
+  startTimer();
+})();
+
 /* ------------------------------------------------- pricing billing toggle */
 const billingButtons = document.querySelectorAll(".billing-toggle [data-billing]");
 if (billingButtons.length) {

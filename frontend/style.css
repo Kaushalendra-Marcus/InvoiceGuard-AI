@@ -296,15 +296,56 @@ section[id] { scroll-margin-top: 84px; }
 /* three-step pipeline */
 .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 
-/* product tour: real screenshots in card frames */
-.tour-grid { display: grid; grid-template-columns: 1.04fr 0.96fr; gap: 22px; }
-.tour-shot { padding: 0; overflow: hidden; }
-.tour-shot img { display: block; width: 100%; height: auto; border-bottom: 1px solid var(--line); }
-.tour-shot figcaption { padding: 14px 18px 20px; display: grid; gap: 3px; font-size: 13.5px; color: var(--muted); }
-.tour-shot figcaption strong { color: var(--ink); font-size: 14.5px; }
+/* product tour: auto + manual screenshot carousel, full image always visible */
+.tour-viewer { padding: 0; overflow: hidden; }
+.tour-frame { position: relative; aspect-ratio: 1440 / 1140; background: #fbfcff; }
+.tour-slide {
+  position: absolute; inset: 0; margin: 0;
+  opacity: 0; transition: opacity .55s ease; pointer-events: none;
+}
+.tour-slide.is-active { opacity: 1; pointer-events: auto; }
+.tour-slide img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.tour-btn {
+  position: absolute; top: 44%; transform: translateY(-50%); z-index: 3;
+  width: 42px; height: 42px; border-radius: 999px; border: 1px solid var(--line);
+  background: rgba(255, 255, 255, .92); color: var(--ink); display: grid; place-items: center;
+  cursor: pointer; box-shadow: 0 6px 18px rgba(15, 23, 42, .10); transition: background .18s ease, box-shadow .18s ease;
+}
+.tour-btn:hover { background: #fff; box-shadow: 0 8px 22px rgba(15, 23, 42, .16); }
+.tour-btn svg { width: 18px; height: 18px; display: block; }
+.tour-prev { left: 14px; }
+.tour-next { right: 14px; }
+.tour-dots {
+  position: absolute; left: 0; right: 0; bottom: 12px; z-index: 3;
+  display: flex; justify-content: center; gap: 7px; margin: 0; padding: 0;
+}
+.tour-dot {
+  width: 9px; height: 9px; border-radius: 999px; border: 0; padding: 0; cursor: pointer;
+  background: #cbd5e1; box-shadow: 0 0 0 3px rgba(251, 252, 255, .85);
+  transition: width .3s ease, background .3s ease;
+}
+.tour-dot.is-active { width: 24px; background: var(--blue); }
+.tour-zoom {
+  position: absolute; top: 12px; right: 12px; z-index: 3;
+  width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center;
+  background: rgba(255, 255, 255, .92); border: 1px solid var(--line); color: var(--ink);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, .10); transition: background .18s ease;
+}
+.tour-zoom:hover { background: #fff; }
+.tour-zoom svg { width: 17px; height: 17px; display: block; }
+.tour-caption {
+  min-height: 92px;
+  border-top: 1px solid var(--line); padding: 13px 20px 16px;
+  display: grid; gap: 3px; font-size: 13.5px; color: var(--muted);
+}
+.tour-caption strong { color: var(--ink); font-size: 14.5px; }
 .tour-link { margin: 26px 0 0; text-align: center; }
 .tour-link a { font-weight: 700; color: var(--blue); }
 .tour-link a:hover { text-decoration: underline; }
+@media (max-width: 900px) {
+  .tour-btn { top: 42%; }
+  .tour-caption { min-height: 118px; }
+}
 .step { position: relative; padding: 24px 22px; }
 .step-chip {
   display: inline-flex; align-items: center; justify-content: center;
@@ -554,7 +595,7 @@ section[id] { scroll-margin-top: 84px; }
   .input-grid, .result-grid { grid-template-columns: 1fr; }
   .status-banner { flex-direction: column; gap: 8px; }
   .hero-art { order: -1; }
-  .fe-grid, .steps, .pricing-grid, .contact-grid, .agents-grid, .tour-grid { grid-template-columns: 1fr; }
+  .fe-grid, .steps, .pricing-grid, .contact-grid, .agents-grid { grid-template-columns: 1fr; }
   .step:not(:last-child)::after { display: none; }
   .hero-stats { flex-wrap: wrap; gap: 18px; }
   .stat { padding-right: 18px; }

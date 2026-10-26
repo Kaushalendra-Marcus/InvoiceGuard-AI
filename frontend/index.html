@@ -225,21 +225,36 @@
         <h2>See the verdict board before you upload</h2>
         <p>Real output from a sample analysis: what matched, what was billed against the PO budget, and every finding with its numbers.</p>
       </div>
-      <div class="tour-grid" data-reveal-stagger>
-        <figure class="card tour-shot">
-          <img src="/assets/app_results_1.png" width="1440" height="915" alt="Invoice and Purchase Order upload cards above a NEEDS_REVIEW verdict panel and a KPI strip with lines compared, matched items, findings and potential excess" loading="lazy" />
-          <figcaption>
-            <strong>Upload, verdict and key numbers.</strong>
-            <span>Load the bundled sample or your own files; the board explains any verdict at a glance and offers a one-click PDF report.</span>
-          </figcaption>
-        </figure>
-        <figure class="card tour-shot">
-          <img src="/assets/app_results_2.png" width="1440" height="1140" alt="Budget utilization rows per PO line item with not-billed flags and a total budget strip, a match confidence donut, line item matches with similarity scores, and the discrepancies list" loading="lazy" />
-          <figcaption>
-            <strong>Budget, matching and findings.</strong>
-            <span>Per-line budget bars, a confidence donut and explainable findings with values; the same content lands in the downloadable PDF report.</span>
-          </figcaption>
-        </figure>
+      <div class="card tour-viewer" id="tour-viewer" data-reveal>
+        <div class="tour-frame" role="region" aria-roledescription="carousel" aria-label="Analyzer screenshots">
+          <figure class="tour-slide is-active"
+                  data-title="Upload, verdict and key numbers."
+                  data-sub="Load the bundled sample or your own files; the board explains any verdict at a glance and offers a one-click PDF report.">
+            <img src="/assets/app_results_1.png" width="1440" height="915" alt="Invoice and Purchase Order upload cards above a NEEDS_REVIEW verdict panel and a KPI strip with lines compared, matched items, findings and potential excess" />
+          </figure>
+          <figure class="tour-slide"
+                  data-title="Budget, matching and findings."
+                  data-sub="Per-line budget bars, a confidence donut and explainable findings with values; the same content lands in the downloadable PDF report.">
+            <img src="/assets/app_results_2.png" width="1440" height="1140" alt="Budget utilization rows per PO line item with not-billed flags and a total budget strip, a match confidence donut, line item matches with similarity scores, and the discrepancies list" loading="lazy" />
+          </figure>
+          <button class="tour-btn tour-prev" type="button" aria-label="Previous screenshot">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 6-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="tour-btn tour-next" type="button" aria-label="Next screenshot">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="tour-dots" id="tour-dots">
+            <button class="tour-dot is-active" type="button" aria-label="Screenshot 1: upload and verdict"></button>
+            <button class="tour-dot" type="button" aria-label="Screenshot 2: budget, matching and findings"></button>
+          </div>
+          <a class="tour-zoom" href="/assets/app_results_1.png" target="_blank" rel="noopener" title="Open this screenshot at full size">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4H5.5A1.5 1.5 0 0 0 4 5.5V9m11-5h3.5A1.5 1.5 0 0 1 20 5.5V9m0 6v3.5a1.5 1.5 0 0 1-1.5 1.5H15M4 15v3.5A1.5 1.5 0 0 0 5.5 20H9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </a>
+        </div>
+        <div class="tour-caption" id="tour-caption">
+          <strong>Upload, verdict and key numbers.</strong>
+          <span>Load the bundled sample or your own files; the board explains any verdict at a glance and offers a one-click PDF report.</span>
+        </div>
       </div>
       <p class="tour-link" data-reveal><a href="/app.html">Try the analyzer on the sample invoice &rarr;</a></p>
     </section>
