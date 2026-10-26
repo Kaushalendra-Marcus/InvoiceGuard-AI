@@ -1,0 +1,10 @@
+{
+  "mcp": {
+    "servers": {
+      "eraser": {
+        "type": "remote",
+        "url": "https://app.eraser.io/api/mcp"
+      }
+    }
+  }
+}
