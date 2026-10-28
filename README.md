@@ -12,6 +12,7 @@
   </p>
   <br/>
   <img src="assets/landing.png" alt="InvoiceGuard AI landing page: an invoice and a Purchase Order compared by an AI Match, with a quantity mismatch (120 invoiced vs 100 ordered) flagged" width="860"/>
+  <p><a href="https://www.loom.com/share/b041f14365f54d4fab61b71f0b9f04e9"><strong>▶️ Watch the demo video</strong></a> — the full flow in about two minutes, recorded on the live app (Loom).</p>
 </div>
 
 ---
