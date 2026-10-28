@@ -417,3 +417,16 @@ All examples are synthetic invoices/POs; no real vendor data in the repository.
 ---
 
 *Built as a focused prototype for Forward Deployed Engineer / ML Engineer internship applications; deliberately small, deliberately honest about what it does and doesn't do.*
+
+---
+
+## Open to opportunities
+
+> *Thanks for reading this far. I built InvoiceGuard AI end to end — backend, frontend, tests, deployment and the agent surface — and I would be happy to discuss the role and next steps: share a suitable time for a quick call and I will make myself available.*
+
+**Currently open to:** Forward Deployed Engineer · ML Engineer · Backend / Full-stack (Python)
+
+- **Email:** [yadavkausha4a5@gmail.com](mailto:yadavkausha4a5@gmail.com?subject=InvoiceGuard%20AI%20-%20next%20steps)
+- **GitHub:** [Kaushalendra-Marcus](https://github.com/Kaushalendra-Marcus)
+
+*This repository is the best proof of work — clone it, run the tests, try the live app.*
