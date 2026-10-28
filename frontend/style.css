@@ -340,8 +340,26 @@ section[id] { scroll-margin-top: 84px; }
 }
 .tour-caption strong { color: var(--ink); font-size: 14.5px; }
 .tour-link { margin: 26px 0 0; text-align: center; }
-.tour-slide.dark-scene { background: #16181d; }
-.tour-slide.dark-scene img { padding: 20px; box-sizing: border-box; }
+
+/* pipeline section: full-width diagram figure with caption strip */
+.pipeline-figure { padding: 0; overflow: hidden; }
+.pipeline-stage { background: #16181d; }
+.pipeline-stage img { display: block; width: 100%; height: auto; }
+.pipeline-caption {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  border-top: 1px solid var(--line); padding: 13px 20px 16px;
+}
+.pipeline-caption span { color: var(--muted); font-size: 13.5px; line-height: 1.5; }
+.pipeline-caption strong { color: var(--ink); font-size: 14.5px; }
+.pipeline-zoom {
+  flex: none; display: inline-flex; align-items: center; gap: 6px;
+  border: 1px solid var(--line); border-radius: 999px; background: #fff;
+  color: var(--blue-dark); text-decoration: none; font-size: 12.5px; font-weight: 700; padding: 7px 14px;
+  transition: border-color .15s, background .15s;
+}
+.pipeline-zoom:hover { border-color: var(--blue); background: var(--blue-soft); }
+.pipeline-credit { margin: 14px 0 0; text-align: center; font-size: 13px; }
+.pipeline-credit a { color: var(--blue-dark); font-weight: 600; }
 .tour-link a { font-weight: 700; color: var(--blue); }
 .tour-link a:hover { text-decoration: underline; }
 @media (max-width: 900px) {

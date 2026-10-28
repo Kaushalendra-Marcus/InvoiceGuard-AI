@@ -41,6 +41,7 @@
       <nav class="nav-chips" aria-label="Primary">
         <a href="#features">Features</a>
         <a href="#how">How it works</a>
+        <a href="#pipeline">Pipeline</a>
         <a href="#checks">What it checks</a>
         <a href="#platform">Platform</a>
       </nav>
@@ -237,11 +238,6 @@
                   data-sub="Per-line budget bars, a confidence donut and explainable findings with values; the same content lands in the downloadable PDF report.">
             <img src="/assets/app_results_2.png" width="1440" height="1140" alt="Budget utilization rows per PO line item with not-billed flags and a total budget strip, a match confidence donut, line item matches with similarity scores, and the discrepancies list" loading="lazy" />
           </figure>
-          <figure class="tour-slide dark-scene"
-                  data-title="The full pipeline, end to end."
-                  data-sub="From upload and preview to rate limits, parsing, matching, validation and the verdict board — including every honest failure path. Authored with Eraser diagram-as-code; regenerate as the pipeline evolves.">
-            <img src="/assets/pipeline_flow.png" width="3010" height="1811" alt="Flow diagram of the InvoiceGuard AI analysis pipeline: a browser user and an AI agent path into a FastAPI service, which rate-limits per IP, checks the invoice text layer, parses the Purchase Order as JSON or CSV, matches invoice lines to PO lines by SKU and description similarity, validates quantities and unit prices deterministically, then renders a verdict with itemized findings and a one-click PDF report" loading="lazy" />
-          </figure>
           <button class="tour-btn tour-prev" type="button" aria-label="Previous screenshot">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 6-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
@@ -251,7 +247,6 @@
           <div class="tour-dots" id="tour-dots">
             <button class="tour-dot is-active" type="button" aria-label="Screenshot 1: upload and verdict"></button>
             <button class="tour-dot" type="button" aria-label="Screenshot 2: budget, matching and findings"></button>
-            <button class="tour-dot" type="button" aria-label="Diagram 3: end-to-end pipeline flow"></button>
           </div>
           <a class="tour-zoom" href="/assets/app_results_1.png" target="_blank" rel="noopener" title="Open this screenshot at full size">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4H5.5A1.5 1.5 0 0 0 4 5.5V9m11-5h3.5A1.5 1.5 0 0 1 20 5.5V9m0 6v3.5a1.5 1.5 0 0 1-1.5 1.5H15M4 15v3.5A1.5 1.5 0 0 0 5.5 20H9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -263,6 +258,24 @@
         </div>
       </div>
       <p class="tour-link" data-reveal><a href="/app.html">Try the analyzer on the sample invoice &rarr;</a></p>
+    </section>
+
+    <section class="section-block" id="pipeline">
+      <div class="section-head" data-reveal>
+        <span class="kicker">Under the hood</span>
+        <h2>The whole pipeline, end to end</h2>
+        <p>Every path a request can take — the happy one and the honest ones: rate limits, unreadable scans and invalid Purchase Orders stop explicitly, never with invented numbers.</p>
+      </div>
+      <figure class="card pipeline-figure" data-reveal>
+        <div class="pipeline-stage">
+          <img src="/assets/pipeline_flow.png" width="3010" height="1811" alt="Flow diagram of the InvoiceGuard AI analysis pipeline: a browser user and an AI agent path into a FastAPI service, which rate-limits per IP, checks the invoice text layer, parses the Purchase Order as JSON or CSV, matches invoice lines to PO lines by SKU and description similarity, validates quantities and unit prices deterministically, then renders a verdict with itemized findings and a one-click PDF report" loading="lazy" />
+        </div>
+        <figcaption class="pipeline-caption">
+          <span><strong>InvoiceGuard AI request flow.</strong> Browser and AI-agent paths share one FastAPI service; every decision node above is a real branch in the backend.</span>
+          <a class="pipeline-zoom" href="/assets/pipeline_flow.png" target="_blank" rel="noopener" title="Open the diagram at full size">Full size &#8599;</a>
+        </figcaption>
+      </figure>
+      <p class="pipeline-credit" data-reveal>Diagram authored with <a href="https://www.eraser.io" target="_blank" rel="noopener">Eraser</a> diagram-as-code — kept in the team workspace so it evolves together with the pipeline.</p>
     </section>
 
     <section class="section-block" id="checks">
