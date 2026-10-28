@@ -340,6 +340,8 @@ section[id] { scroll-margin-top: 84px; }
 }
 .tour-caption strong { color: var(--ink); font-size: 14.5px; }
 .tour-link { margin: 26px 0 0; text-align: center; }
+.tour-slide.dark-scene { background: #16181d; }
+.tour-slide.dark-scene img { padding: 20px; box-sizing: border-box; }
 .tour-link a { font-weight: 700; color: var(--blue); }
 .tour-link a:hover { text-decoration: underline; }
 @media (max-width: 900px) {

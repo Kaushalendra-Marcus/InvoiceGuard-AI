@@ -141,7 +141,7 @@ frontend/                 # Vanilla HTML/CSS/JS single page (no build step)
 ├── style.css             # Design system following the mockups in design/
 ├── app.js                # Session id, usage pill, analyze flow, report rendering, landing polish
 ├── report.js             # Dependency-free branded PDF discrepancy-report writer
-└── assets/               # Logo, hero illustration, landing and analyzer-result screenshots, bundled sample invoice
+└── assets/               # Logo, hero illustration, landing and analyzer-result screenshots, pipeline diagram, bundled sample invoice
 
 samples/                  # Demo data for the worked example (regenerate via scripts/make_samples.py)
 scripts/                  # Utility scripts
@@ -154,6 +154,12 @@ Design notes:
 - The extraction layer (`document_parser.py`) is deliberately modular so the parser can be swapped without touching validation logic.
 - Semantic embedding is a local ONNX model, so there is **no external AI API key, no per-request cost, and no data leaves the machine**.
 - SQLite (WAL) is the storage of record for the prototype; the schema is small and would port to PostgreSQL unchanged.
+
+### The request pipeline, end to end
+
+![End-to-end flow diagram of InvoiceGuard AI: browser and AI-agent paths into the FastAPI service, per-IP rate limiting (8/minute, 100 lifetime), invoice text-layer check with explicit OCR failure, Purchase-Order parsing for JSON and CSV with 422 on invalid input, semantic matching by SKU and description similarity, deterministic quantity and price validation, itemized findings, the verdict board and the one-click PDF report](frontend/assets/pipeline_flow.png)
+
+_Authored with [Eraser](https://www.eraser.io) diagram-as-code — kept in the team workspace so the diagram evolves together with the pipeline. Every decision node above is a real branch in `api.py`: rate limits (Layer 2), text-layer OCR gating, PO schema validation, and the deterministic validator's discrepancy path._
 
 ## API
 
